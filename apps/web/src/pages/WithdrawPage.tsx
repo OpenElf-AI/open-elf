@@ -10,22 +10,22 @@ const WithdrawPage: React.FC = () => {
   const [amount, setAmount] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const balance = 1260.50;
+  const balance = 1260.5;
   const minWithdraw = 50;
 
   const handleWithdraw = () => {
     const numAmount = parseFloat(amount);
-    
+
     if (!amount || isNaN(numAmount)) {
       showToast('请输入提现金额', 'error');
       return;
     }
-    
+
     if (numAmount < minWithdraw) {
       showToast(`最低提现金额 ¥${minWithdraw}`, 'error');
       return;
     }
-    
+
     if (numAmount > balance) {
       showToast('余额不足', 'error');
       return;
@@ -44,7 +44,7 @@ const WithdrawPage: React.FC = () => {
           showToast('提现申请已提交，预计1-3个工作日到账', 'success');
           goBack();
         }, 1500);
-      }
+      },
     });
   };
 
@@ -52,10 +52,7 @@ const WithdrawPage: React.FC = () => {
     <div className="bg-black min-h-screen pb-24">
       <div className="sticky top-0 bg-black/80 backdrop-blur-sm z-10 border-b border-white/5">
         <div className="flex items-center gap-4 p-4">
-          <button
-            onClick={goBack}
-            className="text-[#888888] hover:text-white transition-colors"
-          >
+          <button onClick={goBack} className="text-[#888888] hover:text-white transition-colors">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
@@ -87,7 +84,9 @@ const WithdrawPage: React.FC = () => {
         <div className="bg-[#121212] rounded-2xl p-5 border border-white/5">
           <h2 className="text-white font-semibold text-lg mb-4">提现金额</h2>
           <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white text-2xl font-bold">¥</span>
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white text-2xl font-bold">
+              ¥
+            </span>
             <input
               type="number"
               value={amount}
@@ -106,7 +105,7 @@ const WithdrawPage: React.FC = () => {
           <div className="flex items-center gap-4 p-4 bg-[#1A1A1A] rounded-xl">
             <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
               <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
               </svg>
             </div>
             <div className="flex-1">
@@ -130,7 +129,10 @@ const WithdrawPage: React.FC = () => {
           <h2 className="text-white font-semibold text-lg mb-4">提现记录</h2>
           <div className="space-y-3">
             {[1, 2, 3].map(i => (
-              <div key={i} className="flex items-center justify-between p-3 bg-[#1A1A1A] rounded-xl">
+              <div
+                key={i}
+                className="flex items-center justify-between p-3 bg-[#1A1A1A] rounded-xl"
+              >
                 <div>
                   <div className="text-white font-medium">提现</div>
                   <div className="text-[#666666] text-xs">2024-01-{15 - i}</div>
@@ -153,7 +155,8 @@ const WithdrawPage: React.FC = () => {
         </button>
 
         <div className="text-[#666666] text-xs text-center leading-relaxed">
-          提现申请提交后，预计1-3个工作日内到账<br/>
+          提现申请提交后，预计1-3个工作日内到账
+          <br />
           如有问题，请联系客服
         </div>
       </div>

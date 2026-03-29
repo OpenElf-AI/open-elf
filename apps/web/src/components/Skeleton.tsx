@@ -28,7 +28,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   animation = 'shimmer',
 }) => {
   const baseClasses = 'relative overflow-hidden bg-[#1A1A1A]';
-  
+
   const animationClasses = {
     pulse: 'animate-pulse',
     shimmer: '',
@@ -52,7 +52,10 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   }
 
   return (
-    <div className={cn(baseClasses, animationClasses[animation], variantClasses[variant], className)} style={style}>
+    <div
+      className={cn(baseClasses, animationClasses[animation], variantClasses[variant], className)}
+      style={style}
+    >
       {animation === 'shimmer' && <SkeletonShimmer />}
     </div>
   );
@@ -85,9 +88,9 @@ interface SkeletonAgentCardProps {
 
 export const SkeletonAgentCard: React.FC<SkeletonAgentCardProps> = ({ className, index = 0 }) => {
   const delay = index * 50;
-  
+
   return (
-    <div 
+    <div
       className={cn('bg-[#121212] border border-white/5 rounded-2xl p-4 animate-fadeIn', className)}
       style={{ animationDelay: `${delay}ms` }}
     >
@@ -115,11 +118,14 @@ interface SkeletonConversationCardProps {
   index?: number;
 }
 
-export const SkeletonConversationCard: React.FC<SkeletonConversationCardProps> = ({ className, index = 0 }) => {
+export const SkeletonConversationCard: React.FC<SkeletonConversationCardProps> = ({
+  className,
+  index = 0,
+}) => {
   const delay = index * 50;
-  
+
   return (
-    <div 
+    <div
       className={cn('bg-[#121212] rounded-2xl p-4 animate-fadeIn', className)}
       style={{ animationDelay: `${delay}ms` }}
     >
@@ -142,11 +148,14 @@ interface SkeletonProfileAgentCardProps {
   index?: number;
 }
 
-export const SkeletonProfileAgentCard: React.FC<SkeletonProfileAgentCardProps> = ({ className, index = 0 }) => {
+export const SkeletonProfileAgentCard: React.FC<SkeletonProfileAgentCardProps> = ({
+  className,
+  index = 0,
+}) => {
   const delay = index * 50;
-  
+
   return (
-    <div 
+    <div
       className={cn('bg-[#121212] rounded-2xl p-4 border border-white/5 animate-fadeIn', className)}
       style={{ animationDelay: `${delay}ms` }}
     >
@@ -195,18 +204,19 @@ interface SkeletonListProps {
   type?: 'default' | 'agents' | 'conversations' | 'profile-agents';
 }
 
-export const SkeletonList: React.FC<SkeletonListProps> = ({ 
-  count = 5, 
-  className, 
-  type = 'default' 
+export const SkeletonList: React.FC<SkeletonListProps> = ({
+  count = 5,
+  className,
+  type = 'default',
 }) => {
-  const CardComponent = type === 'agents' 
-    ? SkeletonAgentCard 
-    : type === 'conversations' 
-    ? SkeletonConversationCard 
-    : type === 'profile-agents'
-    ? SkeletonProfileAgentCard
-    : SkeletonCard;
+  const CardComponent =
+    type === 'agents'
+      ? SkeletonAgentCard
+      : type === 'conversations'
+        ? SkeletonConversationCard
+        : type === 'profile-agents'
+          ? SkeletonProfileAgentCard
+          : SkeletonCard;
 
   return (
     <div className={cn('space-y-3', className)}>
@@ -243,7 +253,7 @@ interface SkeletonPageHeaderProps {
   showActionButton?: boolean;
 }
 
-export const SkeletonPageHeader: React.FC<SkeletonPageHeaderProps> = ({ 
+export const SkeletonPageHeader: React.FC<SkeletonPageHeaderProps> = ({
   className,
   showBackButton = true,
   showActionButton = true,

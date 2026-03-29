@@ -47,7 +47,7 @@ const VerificationPage: React.FC<VerificationPageProps> = ({ showFormInitially =
       queryClient.invalidateQueries({ queryKey: ['currentUser'] });
       showToast('认证申请已提交，请等待审核', 'success');
     },
-    onError: (error) => {
+    onError: error => {
       logError(error, 'VerificationPage.submit');
       const errorInfo = parseError(error);
       showToast(errorInfo.message, 'error');
@@ -269,15 +269,20 @@ const VerificationPage: React.FC<VerificationPageProps> = ({ showFormInitially =
           <button
             onClick={() => setShowForm(true)}
             className="w-full min-h-[56px] sm:min-h-[60px] px-6 py-4 sm:py-5 bg-gradient-to-r from-primary to-[#4096ff] text-black rounded-2xl font-bold text-lg sm:text-xl transition-all duration-200 shadow-2xl shadow-primary/40 hover:from-[#0958d9] hover:to-primary active:scale-[0.97] cursor-pointer touch-manipulation select-none"
-            style={{ 
+            style={{
               WebkitTapHighlightColor: 'transparent',
-              touchAction: 'manipulation'
+              touchAction: 'manipulation',
             }}
           >
             <span className="tracking-wide flex items-center justify-center gap-2">
               申请创作者认证
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2.5}
+                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                />
               </svg>
             </span>
           </button>
@@ -290,7 +295,10 @@ const VerificationPage: React.FC<VerificationPageProps> = ({ showFormInitially =
     <div className="bg-black min-h-screen">
       <div className="sticky top-0 bg-black/80 backdrop-blur-sm z-10 border-b border-white/5">
         <div className="flex items-center gap-4 p-4">
-          <button onClick={showForm && !showFormInitially ? () => setShowForm(false) : goBack} className="text-[#888888] hover:text-white transition-colors">
+          <button
+            onClick={showForm && !showFormInitially ? () => setShowForm(false) : goBack}
+            className="text-[#888888] hover:text-white transition-colors"
+          >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
@@ -406,9 +414,9 @@ const VerificationPage: React.FC<VerificationPageProps> = ({ showFormInitially =
               ? 'bg-gradient-to-r from-primary to-[#4096ff] text-black hover:from-[#0958d9] hover:to-primary active:scale-[0.97] shadow-primary/40 cursor-pointer'
               : 'bg-[#1A1A1A] text-[#666666] cursor-not-allowed opacity-60'
           }`}
-          style={{ 
+          style={{
             WebkitTapHighlightColor: 'transparent',
-            touchAction: 'manipulation'
+            touchAction: 'manipulation',
           }}
         >
           {submitMutation.isPending ? (
@@ -420,7 +428,12 @@ const VerificationPage: React.FC<VerificationPageProps> = ({ showFormInitially =
             <span className="tracking-wide flex items-center justify-center gap-2">
               立即提交认证
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 12h14M12 5l7 7-7 7" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2.5}
+                  d="M5 12h14M12 5l7 7-7 7"
+                />
               </svg>
             </span>
           )}

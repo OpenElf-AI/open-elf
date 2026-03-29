@@ -19,10 +19,7 @@ const SelectAgentModal: React.FC<SelectAgentModalProps> = ({ agents, onSelect, o
       <div className="bg-[#121212] w-full sm:max-w-md sm:rounded-2xl rounded-t-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-white font-semibold text-xl">选择智能体</h2>
-          <button
-            onClick={onClose}
-            className="text-[#888888] hover:text-white"
-          >
+          <button onClick={onClose} className="text-[#888888] hover:text-white">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
@@ -54,7 +51,12 @@ const SelectAgentModal: React.FC<SelectAgentModalProps> = ({ agents, onSelect, o
                     <h3 className="text-white font-medium text-base truncate">{agent.name}</h3>
                     <p className="text-[#888888] text-sm truncate">{agent.description}</p>
                   </div>
-                  <svg className="w-5 h-5 text-[#666666]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg
+                    className="w-5 h-5 text-[#666666]"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"

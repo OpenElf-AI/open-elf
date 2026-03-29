@@ -11,10 +11,7 @@ import {
   Order,
   PrepayResult,
   OrderConfirmInput,
-  AgentLevelInfo,
-  AgentLevelConfig,
-  AgentFollow,
-  AgentFollowStatus,
+
   AgentReview,
   AgentReviewList,
   CreateAgentReviewInput,
@@ -27,18 +24,25 @@ import { apiRequest } from './client';
 
 export const realApi = {
   auth: {
-    sendCode: async (phone: string, type: 'login' | 'register' | 'reset_password', captchaToken?: string): Promise<void> => {
+    sendCode: async (
+      phone: string,
+      type: 'login' | 'register' | 'reset_password',
+      captchaToken?: string
+    ): Promise<void> => {
       return apiRequest({
         method: 'POST',
         url: '/auth/send-code',
         data: { phone, type, captchaToken },
       });
     },
-    loginWithCode: async (phoneOrEmail: string, code: string): Promise<{ access_token: string; refresh_token: string; user: User }> => {
+    loginWithCode: async (
+      phoneOrEmail: string,
+      code: string
+    ): Promise<{ access_token: string; refresh_token: string; user: User }> => {
       const isPhone = /^1[3-9]\d{9}$/.test(phoneOrEmail);
       const url = isPhone ? '/auth/login/phone' : '/auth/login-with-code';
       const data = isPhone ? { phone: phoneOrEmail, code } : { phoneOrEmail, code };
-      
+
       const result = await apiRequest({
         method: 'POST',
         url,
@@ -50,7 +54,9 @@ export const realApi = {
       }
       return result;
     },
-    loginQuick: async (accessToken: string): Promise<{ access_token: string; refresh_token: string; user: User }> => {
+    loginQuick: async (
+      accessToken: string
+    ): Promise<{ access_token: string; refresh_token: string; user: User }> => {
       const result = await apiRequest({
         method: 'POST',
         url: '/auth/login/quick',
@@ -62,7 +68,9 @@ export const realApi = {
       }
       return result;
     },
-    refresh: async (refreshToken: string): Promise<{ access_token: string; refresh_token: string }> => {
+    refresh: async (
+      refreshToken: string
+    ): Promise<{ access_token: string; refresh_token: string }> => {
       const result = await apiRequest({
         method: 'POST',
         url: '/auth/refresh',
@@ -351,7 +359,16 @@ export const realApi = {
   },
 
   order: {
-    create: async (data: { outTradeNo: string; totalAmount: number; subject: string; assetType?: string; assetId?: string; assetName?: string; sellerId?: string; payType?: string }): Promise<Order> => {
+    create: async (data: {
+      outTradeNo: string;
+      totalAmount: number;
+      subject: string;
+      assetType?: string;
+      assetId?: string;
+      assetName?: string;
+      sellerId?: string;
+      payType?: string;
+    }): Promise<Order> => {
       return apiRequest({
         method: 'POST',
         url: '/api/order/create',
@@ -401,14 +418,34 @@ export const realApi = {
         url: `/agent-follows/status/${agentId}`,
       });
     },
-    getAgentFollowers: async (agentId: string, page?: number, limit?: number): Promise<{ items: any[]; total: number; page: number; pageSize: number; totalPages: number }> => {
+    getAgentFollowers: async (
+      agentId: string,
+      page?: number,
+      limit?: number
+    ): Promise<{
+      items: any[];
+      total: number;
+      page: number;
+      pageSize: number;
+      totalPages: number;
+    }> => {
       return apiRequest({
         method: 'GET',
         url: `/agent-follows/followers/${agentId}`,
         params: { page, limit },
       });
     },
-    getUserFollowingAgents: async (userId: string, page?: number, limit?: number): Promise<{ items: any[]; total: number; page: number; pageSize: number; totalPages: number }> => {
+    getUserFollowingAgents: async (
+      userId: string,
+      page?: number,
+      limit?: number
+    ): Promise<{
+      items: any[];
+      total: number;
+      page: number;
+      pageSize: number;
+      totalPages: number;
+    }> => {
       return apiRequest({
         method: 'GET',
         url: `/agent-follows/following/${userId}`,
@@ -427,7 +464,16 @@ export const realApi = {
         url: `/agent-follows/counts/user/${userId}`,
       });
     },
-    getMyFollowingAgents: async (page?: number, limit?: number): Promise<{ items: any[]; total: number; page: number; pageSize: number; totalPages: number }> => {
+    getMyFollowingAgents: async (
+      page?: number,
+      limit?: number
+    ): Promise<{
+      items: any[];
+      total: number;
+      page: number;
+      pageSize: number;
+      totalPages: number;
+    }> => {
       return apiRequest({
         method: 'GET',
         url: '/agent-follows/my/following',
@@ -463,14 +509,28 @@ export const realApi = {
         url: `/agent-reviews/${reviewId}`,
       });
     },
-    getAgentReviews: async (agentId: string, page?: number, limit?: number): Promise<AgentReviewList> => {
+    getAgentReviews: async (
+      agentId: string,
+      page?: number,
+      limit?: number
+    ): Promise<AgentReviewList> => {
       return apiRequest({
         method: 'GET',
         url: `/agent-reviews/agent/${agentId}`,
         params: { page, limit },
       });
     },
-    getUserReviews: async (userId: string, page?: number, limit?: number): Promise<{ items: AgentReview[]; total: number; page: number; pageSize: number; totalPages: number }> => {
+    getUserReviews: async (
+      userId: string,
+      page?: number,
+      limit?: number
+    ): Promise<{
+      items: AgentReview[];
+      total: number;
+      page: number;
+      pageSize: number;
+      totalPages: number;
+    }> => {
       return apiRequest({
         method: 'GET',
         url: `/agent-reviews/user/${userId}`,
@@ -483,7 +543,16 @@ export const realApi = {
         url: `/agent-reviews/my/${agentId}`,
       });
     },
-    getMyReviews: async (page?: number, limit?: number): Promise<{ items: AgentReview[]; total: number; page: number; pageSize: number; totalPages: number }> => {
+    getMyReviews: async (
+      page?: number,
+      limit?: number
+    ): Promise<{
+      items: AgentReview[];
+      total: number;
+      page: number;
+      pageSize: number;
+      totalPages: number;
+    }> => {
       return apiRequest({
         method: 'GET',
         url: '/agent-reviews/my',
@@ -500,20 +569,30 @@ export const realApi = {
         data,
       });
     },
-    getAgentAchievements: async (agentId: string, page?: number, limit?: number): Promise<AgentAchievementList> => {
+    getAgentAchievements: async (
+      agentId: string,
+      page?: number,
+      limit?: number
+    ): Promise<AgentAchievementList> => {
       return apiRequest({
         method: 'GET',
         url: `/agent-achievements/agent/${agentId}`,
         params: { page, limit },
       });
     },
-    checkAchievementStatus: async (agentId: string, achievementId: string): Promise<AgentAchievementStatus> => {
+    checkAchievementStatus: async (
+      agentId: string,
+      achievementId: string
+    ): Promise<AgentAchievementStatus> => {
       return apiRequest({
         method: 'GET',
         url: `/agent-achievements/status/${agentId}/${achievementId}`,
       });
     },
-    deleteAchievement: async (agentId: string, achievementId: string): Promise<{ success: boolean }> => {
+    deleteAchievement: async (
+      agentId: string,
+      achievementId: string
+    ): Promise<{ success: boolean }> => {
       return apiRequest({
         method: 'DELETE',
         url: `/agent-achievements/${agentId}/${achievementId}`,

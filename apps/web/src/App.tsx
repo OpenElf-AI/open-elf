@@ -35,6 +35,7 @@ const PrivateContentPage = React.lazy(() => import('./pages/PrivateContentPage')
 const DataAnalyticsPage = React.lazy(() => import('./pages/DataAnalyticsPage'));
 const MediaManagerPage = React.lazy(() => import('./pages/MediaManagerPage'));
 const WithdrawPage = React.lazy(() => import('./pages/WithdrawPage'));
+const RealNameVerificationPage = React.lazy(() => import('./pages/RealNameVerificationPage'));
 
 const PageLoading: React.FC = () => (
   <div className="min-h-screen bg-black flex items-center justify-center">
@@ -48,10 +49,10 @@ const PageLoading: React.FC = () => (
 const AppContent: React.FC = () => {
   useLLMInit();
   const { currentView, goBack, setCurrentView } = useAppStore();
-  const { isLoggedIn, setUser, user } = useUserStore();
+  const { isLoggedIn, setUser } = useUserStore();
   const authToken = localStorage.getItem('auth_token');
   const [apiInitialized, setApiInitialized] = useState(false);
-  const [usingMock, setUsingMock] = useState(false);
+  const [, setUsingMock] = useState(false);
   const [showServiceNotice, setShowServiceNotice] = useState(false);
 
   useEffect(() => {
@@ -83,11 +84,11 @@ const AppContent: React.FC = () => {
   React.useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash;
-      
+
       if (hash.startsWith('#/paymentResult')) {
         const urlParams = new URLSearchParams(hash.split('?')[1] || '');
         const outTradeNo = urlParams.get('out_trade_no');
-        
+
         if (outTradeNo) {
           setCurrentView({ type: 'paymentResult', outTradeNo, orderId: outTradeNo });
           window.location.hash = '';
@@ -157,24 +158,26 @@ const AppContent: React.FC = () => {
           return wrapWithErrorBoundary(<SettingsPage onBack={goBack} />);
         case 'orderConfirm':
           return wrapWithErrorBoundary(
-            <OrderConfirmPage 
-              assetType={currentView.assetType} 
-              assetId={currentView.assetId} 
-              onBack={goBack} 
+            <OrderConfirmPage
+              assetType={currentView.assetType}
+              assetId={currentView.assetId}
+              onBack={goBack}
             />
           );
         case 'paymentResult':
           return wrapWithErrorBoundary(
-            <PaymentResultPage 
-              orderId={currentView.orderId} 
+            <PaymentResultPage
+              orderId={currentView.orderId}
               outTradeNo={currentView.outTradeNo || currentView.orderId}
-              onBack={goBack} 
+              onBack={goBack}
             />
           );
         case 'myOrders':
           return wrapWithErrorBoundary(<MyOrdersPage onBack={goBack} />);
         case 'agentChat':
-          return wrapWithErrorBoundary(<AgentChatPage agentId={currentView.agentId} onBack={goBack} />);
+          return wrapWithErrorBoundary(
+            <AgentChatPage agentId={currentView.agentId} onBack={goBack} />
+          );
         case 'createWork':
           return wrapWithErrorBoundary(<CreateWorkPage />);
         case 'privateContent':
@@ -185,6 +188,8 @@ const AppContent: React.FC = () => {
           return wrapWithErrorBoundary(<MediaManagerPage />);
         case 'withdraw':
           return wrapWithErrorBoundary(<WithdrawPage />);
+        case 'realNameVerification':
+          return wrapWithErrorBoundary(<RealNameVerificationPage onBack={goBack} />);
       }
     }
 
@@ -208,24 +213,41 @@ const AppContent: React.FC = () => {
 
   const ServiceNotice = () => {
     if (!showServiceNotice) return null;
-    
+
     return (
       <div className="fixed top-0 left-0 right-0 z-[9999] bg-yellow-500/95 backdrop-blur-sm border-b border-yellow-400/30">
         <div className="max-w-md mx-auto px-4 py-3">
           <div className="flex items-start gap-3">
-            <svg className="w-5 h-5 text-yellow-900 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            <svg
+              className="w-5 h-5 text-yellow-900 flex-shrink-0 mt-0.5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              />
             </svg>
             <div className="flex-1">
               <p className="text-yellow-900 text-sm font-medium">演示模式</p>
-              <p className="text-yellow-900/80 text-xs mt-0.5">后端服务暂时不可用，当前使用模拟数据</p>
+              <p className="text-yellow-900/80 text-xs mt-0.5">
+                后端服务暂时不可用，当前使用模拟数据
+              </p>
             </div>
             <button
               onClick={() => setShowServiceNotice(false)}
               className="text-yellow-900/60 hover:text-yellow-900 transition-colors"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </button>
           </div>

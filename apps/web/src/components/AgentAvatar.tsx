@@ -8,11 +8,11 @@ interface AgentAvatarProps {
   className?: string;
 }
 
-const AgentAvatar: React.FC<AgentAvatarProps> = ({ 
-  size = 'md', 
-  src, 
+const AgentAvatar: React.FC<AgentAvatarProps> = ({
+  size = 'md',
+  src,
   alt = '智能体头像',
-  className = '' 
+  className = '',
 }) => {
   const sizeClasses = {
     sm: 'w-8 h-8',
@@ -56,9 +56,7 @@ const AgentAvatar: React.FC<AgentAvatarProps> = ({
   }
 
   return (
-    <div className={`${sizeClasses[size]} rounded-full ${className}`}>
-      {defaultPlaceholder}
-    </div>
+    <div className={`${sizeClasses[size]} rounded-full ${className}`}>{defaultPlaceholder}</div>
   );
 };
 

@@ -22,11 +22,11 @@ const MediaManagerPage: React.FC = () => {
     { id: '1', name: '智能体头像1.png', type: 'image', size: '2.1 MB', createdAt: '2024-01-15' },
     { id: '2', name: '宣传视频.mp4', type: 'video', size: '128 MB', createdAt: '2024-01-10' },
     { id: '3', name: '背景音乐.mp3', type: 'audio', size: '3.5 MB', createdAt: '2024-01-08' },
-    { id: '4', name: '封面图设计.jpg', type: 'image', size: '4.8 MB', createdAt: '2024-01-05' }
+    { id: '4', name: '封面图设计.jpg', type: 'image', size: '4.8 MB', createdAt: '2024-01-05' },
   ]);
 
   const toggleSelect = (id: string) => {
-    setSelectedItems(prev => 
+    setSelectedItems(prev =>
       prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
     );
   };
@@ -42,19 +42,15 @@ const MediaManagerPage: React.FC = () => {
     showToast('已删除选中的文件', 'success');
   };
 
-  const filteredItems = activeType === 'all' 
-    ? items 
-    : items.filter(item => item.type === activeType);
+  const filteredItems =
+    activeType === 'all' ? items : items.filter(item => item.type === activeType);
 
   return (
     <div className="bg-black min-h-screen pb-24">
       <div className="sticky top-0 bg-black/80 backdrop-blur-sm z-10 border-b border-white/5">
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center gap-4">
-            <button
-              onClick={goBack}
-              className="text-[#888888] hover:text-white transition-colors"
-            >
+            <button onClick={goBack} className="text-[#888888] hover:text-white transition-colors">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
@@ -102,7 +98,7 @@ const MediaManagerPage: React.FC = () => {
             { key: 'all', label: '全部' },
             { key: 'image', label: '图片' },
             { key: 'video', label: '视频' },
-            { key: 'audio', label: '音频' }
+            { key: 'audio', label: '音频' },
           ].map(tab => (
             <button
               key={tab.key}
@@ -122,7 +118,12 @@ const MediaManagerPage: React.FC = () => {
           onClick={handleUpload}
           className="w-full bg-[#121212] border-2 border-dashed border-primary/40 rounded-2xl py-8 flex flex-col items-center gap-3 hover:border-primary/60 transition-colors"
         >
-          <svg className="w-12 h-12 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            className="w-12 h-12 text-primary"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -173,7 +174,12 @@ const MediaManagerPage: React.FC = () => {
                       }`}
                     >
                       {selectedItems.includes(item.id) && (
-                        <svg className="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg
+                          className="w-4 h-4 text-black"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -187,7 +193,12 @@ const MediaManagerPage: React.FC = () => {
                   <div className="relative flex-shrink-0">
                     <div className="w-12 h-12 bg-[#1A1A1A] rounded-xl flex items-center justify-center">
                       {item.type === 'image' && (
-                        <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg
+                          className="w-6 h-6 text-primary"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -197,7 +208,12 @@ const MediaManagerPage: React.FC = () => {
                         </svg>
                       )}
                       {item.type === 'video' && (
-                        <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg
+                          className="w-6 h-6 text-primary"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -207,7 +223,12 @@ const MediaManagerPage: React.FC = () => {
                         </svg>
                       )}
                       {item.type === 'audio' && (
-                        <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg
+                          className="w-6 h-6 text-primary"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"

@@ -22,12 +22,13 @@ const CapabilityPackageMarketplacePage: React.FC<{ onBack?: () => void }> = ({ o
   });
 
   const prepayMutation = useMutation({
-    mutationFn: (pkgId: string) => realApi.pay.prepay({ 
-      assetType: 'capability', 
-      assetId: pkgId,
-      userId: user?.id 
-    }),
-    onSuccess: (result) => {
+    mutationFn: (pkgId: string) =>
+      realApi.pay.prepay({
+        assetType: 'capability',
+        assetId: pkgId,
+        userId: user?.id,
+      }),
+    onSuccess: result => {
       console.log('[Payment] Prepay successful, redirecting to:', result.paymentUrl);
       setIsRedirecting(false);
       window.location.href = result.paymentUrl;
@@ -144,13 +145,11 @@ const CapabilityPackageMarketplacePage: React.FC<{ onBack?: () => void }> = ({ o
                                 : 'bg-primary text-black hover:bg-primary/90'
                             }`}
                           >
-                            {isSoldOut ? (
-                              '已售罄'
-                            ) : isRedirecting || prepayMutation.isPending ? (
-                              '正在跳转...'
-                            ) : (
-                              '购买'
-                            )}
+                            {isSoldOut
+                              ? '已售罄'
+                              : isRedirecting || prepayMutation.isPending
+                                ? '正在跳转...'
+                                : '购买'}
                           </button>
                         </div>
                       </div>

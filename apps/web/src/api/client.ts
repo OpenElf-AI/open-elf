@@ -55,7 +55,7 @@ apiClient.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    
+
     sendToBridge({
       type: 'request',
       url: config.url,
@@ -64,7 +64,7 @@ apiClient.interceptors.request.use(
       params: config.params,
       timestamp: new Date().toISOString(),
     });
-    
+
     return config;
   },
   error => {
@@ -90,7 +90,10 @@ apiClient.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
-    const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean; _retryCount?: number };
+    const originalRequest = error.config as AxiosRequestConfig & {
+      _retry?: boolean;
+      _retryCount?: number;
+    };
 
     sendToBridge({
       type: 'response_error',

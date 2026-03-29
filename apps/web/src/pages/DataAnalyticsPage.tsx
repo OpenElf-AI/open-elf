@@ -11,7 +11,7 @@ const DataAnalyticsPage: React.FC = () => {
     totalViews: 1285,
     totalSales: 42,
     totalRevenue: 1260,
-    conversionRate: 3.2
+    conversionRate: 3.2,
   };
 
   const handleExport = () => {
@@ -23,10 +23,7 @@ const DataAnalyticsPage: React.FC = () => {
       <div className="sticky top-0 bg-black/80 backdrop-blur-sm z-10 border-b border-white/5">
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center gap-4">
-            <button
-              onClick={goBack}
-              className="text-[#888888] hover:text-white transition-colors"
-            >
+            <button onClick={goBack} className="text-[#888888] hover:text-white transition-colors">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
@@ -59,7 +56,7 @@ const DataAnalyticsPage: React.FC = () => {
           {[
             { key: '7d', label: '7天' },
             { key: '30d', label: '30天' },
-            { key: '90d', label: '90天' }
+            { key: '90d', label: '90天' },
           ].map(range => (
             <button
               key={range.key}
@@ -78,7 +75,9 @@ const DataAnalyticsPage: React.FC = () => {
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-[#121212] rounded-2xl p-5 border border-white/5">
             <div className="text-[#888888] text-sm mb-1">浏览量</div>
-            <div className="text-white text-3xl font-bold mb-1">{stats.totalViews.toLocaleString()}</div>
+            <div className="text-white text-3xl font-bold mb-1">
+              {stats.totalViews.toLocaleString()}
+            </div>
             <div className="text-green-500 text-xs">+12.5%</div>
           </div>
           <div className="bg-[#121212] rounded-2xl p-5 border border-white/5">
@@ -102,7 +101,12 @@ const DataAnalyticsPage: React.FC = () => {
           <h2 className="text-white font-semibold text-lg mb-4">趋势图表</h2>
           <div className="h-48 bg-[#1A1A1A] rounded-xl flex items-center justify-center">
             <div className="text-[#666666] text-center">
-              <svg className="w-12 h-12 mx-auto mb-2 text-[#666666]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="w-12 h-12 mx-auto mb-2 text-[#666666]"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -120,11 +124,15 @@ const DataAnalyticsPage: React.FC = () => {
           <div className="space-y-3">
             {[1, 2, 3].map(i => (
               <div key={i} className="flex items-center gap-4 p-3 bg-[#1A1A1A] rounded-xl">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
-                  i === 1 ? 'bg-yellow-500 text-black' :
-                  i === 2 ? 'bg-gray-400 text-black' :
-                  'bg-orange-600 text-white'
-                }`}>
+                <div
+                  className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
+                    i === 1
+                      ? 'bg-yellow-500 text-black'
+                      : i === 2
+                        ? 'bg-gray-400 text-black'
+                        : 'bg-orange-600 text-white'
+                  }`}
+                >
                   {i}
                 </div>
                 <div className="flex-1">

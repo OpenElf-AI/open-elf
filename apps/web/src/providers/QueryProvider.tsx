@@ -30,7 +30,7 @@ const queryClient = new QueryClient({
         if (failureCount >= 3) return false;
         return isRetryableError(error);
       },
-      retryDelay: (attemptIndex) => {
+      retryDelay: attemptIndex => {
         const baseDelay = 1000;
         const maxDelay = 30000;
         return Math.min(baseDelay * Math.pow(2, attemptIndex), maxDelay);
@@ -41,7 +41,7 @@ const queryClient = new QueryClient({
         if (failureCount >= 2) return false;
         return isNetworkError(error);
       },
-      retryDelay: (attemptIndex) => {
+      retryDelay: attemptIndex => {
         return Math.min(1000 * Math.pow(2, attemptIndex), 10000);
       },
     },
@@ -49,9 +49,7 @@ const queryClient = new QueryClient({
 });
 
 export const QueryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <QueryClientProvider client={queryClient}>
-    {children}
-  </QueryClientProvider>
+  <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
 );
 
 export { queryClient, isNetworkError, isServerError, isRetryableError };

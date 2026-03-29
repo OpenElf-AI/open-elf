@@ -38,10 +38,7 @@ const CreateWorkPage: React.FC = () => {
     <div className="bg-black min-h-screen pb-24">
       <div className="sticky top-0 bg-black/80 backdrop-blur-sm z-10 border-b border-white/5">
         <div className="flex items-center gap-4 p-4">
-          <button
-            onClick={goBack}
-            className="text-[#888888] hover:text-white transition-colors"
-          >
+          <button onClick={goBack} className="text-[#888888] hover:text-white transition-colors">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
@@ -58,7 +55,7 @@ const CreateWorkPage: React.FC = () => {
       <div className="p-5 space-y-6">
         <div className="bg-[#121212] rounded-2xl p-6 border border-white/5">
           <h2 className="text-white font-semibold text-lg mb-4">作品信息</h2>
-          
+
           <div className="space-y-5">
             <div>
               <label className="text-[#888888] text-sm block mb-2">作品标题</label>
@@ -104,7 +101,12 @@ const CreateWorkPage: React.FC = () => {
             <div>
               <label className="text-[#888888] text-sm block mb-2">上传作品</label>
               <button className="w-full bg-[#1A1A1A] border-2 border-dashed border-white/20 rounded-xl py-8 flex flex-col items-center gap-3 hover:border-primary/40 transition-colors">
-                <svg className="w-12 h-12 text-[#666666]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg
+                  className="w-12 h-12 text-[#666666]"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"

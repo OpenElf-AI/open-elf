@@ -31,9 +31,9 @@ export const FormField: React.FC<FormFieldProps> = ({
           {required && <span className="text-red-500">*</span>}
         </label>
       )}
-      
+
       {children}
-      
+
       {error && (
         <p className="text-sm text-red-500 flex items-center gap-1">
           <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -46,10 +46,8 @@ export const FormField: React.FC<FormFieldProps> = ({
           {error}
         </p>
       )}
-      
-      {!error && hint && (
-        <p className="text-sm text-[#666666]">{hint}</p>
-      )}
+
+      {!error && hint && <p className="text-sm text-[#666666]">{hint}</p>}
     </div>
   );
 };
@@ -59,11 +57,7 @@ interface FormInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement
   className?: string;
 }
 
-export const FormInput: React.FC<FormInputProps> = ({
-  error = false,
-  className,
-  ...props
-}) => {
+export const FormInput: React.FC<FormInputProps> = ({ error = false, className, ...props }) => {
   return (
     <input
       className={cn(
@@ -78,7 +72,10 @@ export const FormInput: React.FC<FormInputProps> = ({
   );
 };
 
-interface FormTextareaProps extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'className'> {
+interface FormTextareaProps extends Omit<
+  React.TextareaHTMLAttributes<HTMLTextAreaElement>,
+  'className'
+> {
   error?: boolean;
   className?: string;
 }
@@ -107,11 +104,7 @@ interface FormSelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElem
   className?: string;
 }
 
-export const FormSelect: React.FC<FormSelectProps> = ({
-  error = false,
-  className,
-  ...props
-}) => {
+export const FormSelect: React.FC<FormSelectProps> = ({ error = false, className, ...props }) => {
   return (
     <select
       className={cn(

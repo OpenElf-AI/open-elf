@@ -5,7 +5,10 @@ interface CapabilityPackageAvatarProps {
   className?: string;
 }
 
-const CapabilityPackageAvatar: React.FC<CapabilityPackageAvatarProps> = ({ size = 'md', className = '' }) => {
+const CapabilityPackageAvatar: React.FC<CapabilityPackageAvatarProps> = ({
+  size = 'md',
+  className = '',
+}) => {
   const sizeClasses = {
     sm: 'w-8 h-8',
     md: 'w-12 h-12',
@@ -14,7 +17,9 @@ const CapabilityPackageAvatar: React.FC<CapabilityPackageAvatarProps> = ({ size 
   };
 
   return (
-    <div className={`${sizeClasses[size]} rounded-xl bg-gradient-to-br from-[#9254DE] to-[#531DAB] flex items-center justify-center ${className}`}>
+    <div
+      className={`${sizeClasses[size]} rounded-xl bg-gradient-to-br from-[#9254DE] to-[#531DAB] flex items-center justify-center ${className}`}
+    >
       <svg className="w-1/2 h-1/2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path
           strokeLinecap="round"

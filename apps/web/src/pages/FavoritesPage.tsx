@@ -80,7 +80,7 @@ const FavoritesPage: React.FC = () => {
               去市集发现喜欢的智能体，点击收藏吧！
             </p>
             <button
-              onClick={() => setCurrentView({ type: 'discover' })}
+              onClick={() => setCurrentView('discover')}
               className="mt-6 px-8 py-4 bg-primary text-black rounded-xl font-semibold text-base hover:bg-primary/90 transition-colors active:scale-95"
             >
               去市集

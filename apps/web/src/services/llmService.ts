@@ -329,7 +329,7 @@ class MockProvider implements LLMProvider {
 
     let hasCapability = false;
     let capabilityName = '';
-    
+
     const systemMessage = messages.find(m => m.role === 'system');
     if (systemMessage?.content) {
       const capabilityMatch = systemMessage.content.match(/【(.+?)】\n([\s\S]*?)(?=\n【|$)/);
@@ -341,9 +341,9 @@ class MockProvider implements LLMProvider {
 
     if (hasCapability) {
       const userMessage = messages.filter(m => m.role === 'user').pop()?.content || '';
-      
+
       let response = `✨ 正在使用【${capabilityName}】为您服务...\n\n`;
-      
+
       if (capabilityName.includes('文案') || capabilityName.includes('策划')) {
         response += `根据您的需求"${userMessage}"，为您提供以下文案建议：\n\n`;
         response += `### 产品文案方案\n\n`;
@@ -390,7 +390,7 @@ class MockProvider implements LLMProvider {
         response += `---\n\n`;
         response += `如果您还有其他问题，请随时告诉我！`;
       }
-      
+
       return {
         content: response,
         usage: {

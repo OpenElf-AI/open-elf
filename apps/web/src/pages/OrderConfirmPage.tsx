@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAppStore } from '../store';
 import { useToast } from '../components/Toast';
 import { useAgent } from '../hooks/useAgents';
 import { usePrepay } from '../hooks/useOrders';
-import { Agent } from '../api/types';
-import { getApi } from '../api';
 
 interface OrderConfirmPageProps {
-  assetType: 'agent';
+  assetType: 'agent' | 'capability';
   assetId: string;
   onBack: () => void;
 }
@@ -26,35 +24,38 @@ const OrderConfirmPage: React.FC<OrderConfirmPageProps> = ({ assetType, assetId,
 
   const handleCreateOrder = () => {
     console.log('【支付】点击「创建订单」按钮');
-    prepayMutation.mutate({ assetType, assetId }, {
-      onSuccess: (result) => {
-        console.log('【支付】接口调用成功');
-        console.log('【支付】返回数据:', result);
-        
-        if (result.paymentUrl) {
-          setPaymentUrl(result.paymentUrl);
-          setOrderId(result.outTradeNo || null);
-          setOutTradeNo(result.outTradeNo || null);
-          showToast('✅ 订单创建成功，请前往支付宝完成支付', 'success');
-        } else {
-          console.error('【支付】❌ paymentUrl 不存在！');
-          showToast('支付链接获取失败，请重试', 'error');
-        }
-      },
-      onError: (error: any) => {
-        console.log('【支付】❌ 接口调用失败');
-        console.log('【支付】错误信息:', error);
-        showToast(error.message || '创建订单失败，请稍后重试', 'error');
-      },
-    });
+    prepayMutation.mutate(
+      { assetType, assetId },
+      {
+        onSuccess: result => {
+          console.log('【支付】接口调用成功');
+          console.log('【支付】返回数据:', result);
+
+          if (result.paymentUrl) {
+            setPaymentUrl(result.paymentUrl);
+            setOrderId(result.outTradeNo || null);
+            setOutTradeNo(result.outTradeNo || null);
+            showToast('✅ 订单创建成功，请前往支付宝完成支付', 'success');
+          } else {
+            console.error('【支付】❌ paymentUrl 不存在！');
+            showToast('支付链接获取失败，请重试', 'error');
+          }
+        },
+        onError: (error: any) => {
+          console.log('【支付】❌ 接口调用失败');
+          console.log('【支付】错误信息:', error);
+          showToast(error.message || '创建订单失败，请稍后重试', 'error');
+        },
+      }
+    );
   };
 
   const handleGoToAlipay = () => {
     if (!paymentUrl) return;
-    
+
     setIsRedirecting(true);
     showToast('正在跳转到支付宝收银台，请稍候...', 'info');
-    
+
     try {
       window.location.href = paymentUrl;
     } catch (error) {
@@ -98,7 +99,12 @@ const OrderConfirmPage: React.FC<OrderConfirmPageProps> = ({ assetType, assetId,
       <div className="p-4 flex items-center gap-4 border-b border-white/10">
         <button onClick={onBack} className="p-2 hover:bg-white/5 rounded-lg">
           <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
           </svg>
         </button>
         <h1 className="text-white font-semibold text-lg">订单确认</h1>
@@ -108,11 +114,7 @@ const OrderConfirmPage: React.FC<OrderConfirmPageProps> = ({ assetType, assetId,
         <div className="bg-[#1A1A1A] rounded-2xl p-4 mb-4">
           <div className="flex gap-4">
             <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0">
-              <img
-                src={agent.avatar}
-                alt={agent.name}
-                className="w-full h-full object-cover"
-              />
+              <img src={agent.avatar} alt={agent.name} className="w-full h-full object-cover" />
             </div>
             <div className="flex-1">
               <h2 className="text-white font-semibold text-lg mb-1">{agent.name}</h2>
@@ -147,7 +149,9 @@ const OrderConfirmPage: React.FC<OrderConfirmPageProps> = ({ assetType, assetId,
 
         {paymentUrl && (
           <div className="bg-green-900/30 border border-green-500/50 rounded-2xl p-4 mt-4">
-            <h3 className="text-green-400 font-semibold mb-3">✅ 订单创建成功，请前往支付宝完成支付</h3>
+            <h3 className="text-green-400 font-semibold mb-3">
+              ✅ 订单创建成功，请前往支付宝完成支付
+            </h3>
             <p className="text-[#888888] text-sm mb-4">点击下方按钮跳转至支付宝收银台</p>
             <div className="flex flex-col gap-3">
               <button
@@ -167,7 +171,11 @@ const OrderConfirmPage: React.FC<OrderConfirmPageProps> = ({ assetType, assetId,
               <button
                 onClick={() => {
                   if (outTradeNo || orderId) {
-                    setCurrentView({ type: 'paymentResult', orderId: orderId || outTradeNo || '', outTradeNo: outTradeNo || orderId || '' });
+                    setCurrentView({
+                      type: 'paymentResult',
+                      orderId: orderId || outTradeNo || '',
+                      outTradeNo: outTradeNo || orderId || '',
+                    });
                   }
                 }}
                 className="w-full bg-[#333333] text-white py-4 rounded-xl font-semibold text-lg hover:bg-[#444444] transition-colors"

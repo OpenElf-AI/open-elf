@@ -56,11 +56,8 @@ export const useSendMessage = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: {
-      conversationId?: string;
-      agentId?: string;
-      content: string;
-    }) => api.messages.send(data),
+    mutationFn: (data: { conversationId?: string; agentId?: string; content: string }) =>
+      api.messages.send(data),
     onSuccess: (_, variables) => {
       if (variables.conversationId) {
         queryClient.invalidateQueries({

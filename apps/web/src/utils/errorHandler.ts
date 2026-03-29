@@ -104,12 +104,12 @@ export const measurePerformance = async <T>(
     const result = await fn();
     const duration = performance.now() - startTime;
     console.log(`[Performance] ${metricName}: ${duration.toFixed(2)}ms`);
-    
+
     if (import.meta.env.PROD) {
       // TODO: 在生产环境中发送性能指标到监控服务
       // sendPerformanceMetric(metricName, duration);
     }
-    
+
     return result;
   } catch (error) {
     const duration = performance.now() - startTime;
@@ -121,7 +121,7 @@ export const measurePerformance = async <T>(
 export const captureException = (error: unknown, extra?: Record<string, unknown>) => {
   const errorInfo = parseError(error);
   console.error('[Exception Captured]', { ...errorInfo, extra });
-  
+
   if (import.meta.env.PROD) {
     // TODO: 在生产环境中发送异常到监控服务
     // sendExceptionToSentry(errorInfo, extra);
@@ -129,7 +129,7 @@ export const captureException = (error: unknown, extra?: Record<string, unknown>
 };
 
 if (typeof window !== 'undefined') {
-  window.addEventListener('error', (event) => {
+  window.addEventListener('error', event => {
     logError(event.error, 'Global Error');
     captureException(event.error, {
       message: event.message,
@@ -139,7 +139,7 @@ if (typeof window !== 'undefined') {
     });
   });
 
-  window.addEventListener('unhandledrejection', (event) => {
+  window.addEventListener('unhandledrejection', event => {
     logError(event.reason, 'Unhandled Promise Rejection');
     captureException(event.reason, { type: 'unhandledrejection' });
   });

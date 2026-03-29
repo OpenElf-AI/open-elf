@@ -2,7 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { format } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
 import { useUserStore } from '../store';
-import { useConversation, useMessages, useSendMessage, useGenerateReply } from '../hooks/useConversations';
+import {
+  useConversation,
+  useMessages,
+  useSendMessage,
+  useGenerateReply,
+} from '../hooks/useConversations';
 import { useAgent, useMyAgents, useAddAgentExp } from '../hooks/useAgents';
 
 interface ConversationDetailPageProps {
@@ -47,12 +52,12 @@ const ConversationDetailPage: React.FC<ConversationDetailPageProps> = ({
 
     const text = inputText;
     setInputText('');
-    
+
     await sendMessageMutation.mutateAsync({
       conversationId,
       content: text,
     });
-    
+
     await generateReplyMutation.mutateAsync(conversationId);
 
     if (myAgent && conversation?.agentId) {
@@ -184,8 +189,6 @@ const ConversationDetailPage: React.FC<ConversationDetailPageProps> = ({
             </div>
           </div>
         ))}
-
-
 
         {(sendMessageMutation.isPending || generateReplyMutation.isPending) && (
           <div className="flex gap-3">

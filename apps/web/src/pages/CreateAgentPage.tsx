@@ -14,6 +14,8 @@ const CreateAgentPage: React.FC<{ onBack?: () => void }> = ({ onBack }) => {
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('29');
   const [baseModel, setBaseModel] = useState('');
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [totalSupply, setTotalSupply] = useState('10'); // 默认总供应量
 
   const baseModels = [
     { value: 'open-elf-general', label: 'OpenElf 通用助手' },
@@ -25,24 +27,27 @@ const CreateAgentPage: React.FC<{ onBack?: () => void }> = ({ onBack }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    createMutation.mutate({
-      name,
-      description,
-      avatar: '',
-      prompt: '',
-      category: '通用',
-      price: parseFloat(price),
-      totalSupply: 1,
-      baseModel,
-    }, {
-      onSuccess: () => {
-        showToast('智能体已上架，等待其他用户购买', 'success');
-        setCurrentView({ type: 'discover' });
+    createMutation.mutate(
+      {
+        name,
+        description,
+        avatar: '',
+        prompt: '',
+        category: '通用',
+        price: parseFloat(price),
+        totalSupply: parseInt(totalSupply),
+        baseModel,
       },
-      onError: error => {
-        showToast(error instanceof Error ? error.message : '创建失败，请重试', 'error');
-      },
-    });
+      {
+        onSuccess: () => {
+          showToast('智能体已提交，等待平台审核', 'success');
+          setCurrentView('discover');
+        },
+        onError: error => {
+          showToast(error instanceof Error ? error.message : '创建失败，请重试', 'error');
+        },
+      }
+    );
   };
 
   const isFormValid =
@@ -53,7 +58,11 @@ const CreateAgentPage: React.FC<{ onBack?: () => void }> = ({ onBack }) => {
     price &&
     parseFloat(price) >= 9 &&
     parseFloat(price) <= 99 &&
-    baseModel;
+    baseModel &&
+    profileImage &&
+    totalSupply &&
+    parseInt(totalSupply) >= 1 &&
+    parseInt(totalSupply) <= 1000;
 
   if (user?.verificationStatus === 'unverified') {
     return (
@@ -241,6 +250,82 @@ const CreateAgentPage: React.FC<{ onBack?: () => void }> = ({ onBack }) => {
 
           <div className="bg-[#121212] border border-white/5 rounded-2xl p-4 sm:p-5">
             <h2 className="text-white font-semibold text-base sm:text-lg mb-3 sm:mb-4">
+              形象设置 <span className="text-red-400">*</span>
+            </h2>
+            <div>
+              <label className="block text-white text-sm font-medium mb-2">
+                上传上半身正面照片
+              </label>
+              <div className="border-2 border-dashed border-white/20 rounded-xl p-4 text-center">
+                {profileImage ? (
+                  <div className="relative">
+                    <img
+                      src={profileImage}
+                      alt="Profile"
+                      className="w-40 h-40 object-cover rounded-lg mx-auto"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setProfileImage(null)}
+                      className="absolute top-2 right-2 bg-red-500 text-white w-8 h-8 rounded-full flex items-center justify-center"
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                ) : (
+                  <label className="cursor-pointer">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={e => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onloadend = () => {
+                            setProfileImage(reader.result as string);
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                    />
+                    <div className="flex flex-col items-center gap-2">
+                      <svg
+                        className="w-12 h-12 text-[#666666]"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1.5}
+                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+                      </svg>
+                      <span className="text-[#888888] text-sm">点击上传清晰的上半身正面照片</span>
+                      <span className="text-[#666666] text-xs">用于生成3D模型</span>
+                    </div>
+                  </label>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-[#121212] border border-white/5 rounded-2xl p-4 sm:p-5">
+            <h2 className="text-white font-semibold text-base sm:text-lg mb-3 sm:mb-4">
               基础模型 <span className="text-red-400">*</span>
             </h2>
             <div>
@@ -259,9 +344,11 @@ const CreateAgentPage: React.FC<{ onBack?: () => void }> = ({ onBack }) => {
                         : 'bg-[#1A1A1A] border border-white/10 hover:border-[#1677FF]/50'
                     }`}
                   >
-                    <span className={`text-sm font-medium ${
-                      baseModel === model.value ? 'text-[#1677FF]' : 'text-white'
-                    }`}>
+                    <span
+                      className={`text-sm font-medium ${
+                        baseModel === model.value ? 'text-[#1677FF]' : 'text-white'
+                      }`}
+                    >
                       {model.label}
                     </span>
                   </button>
@@ -274,25 +361,41 @@ const CreateAgentPage: React.FC<{ onBack?: () => void }> = ({ onBack }) => {
             <h2 className="text-white font-semibold text-base sm:text-lg mb-3 sm:mb-4">
               销售设置 <span className="text-red-400">*</span>
             </h2>
-            <div>
-              <label className="text-white font-medium text-sm sm:text-base mb-2 block">
-                定价 <span className="text-red-400">*</span>
-              </label>
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white text-base sm:text-lg">
-                  ¥
-                </span>
+            <div className="space-y-4">
+              <div>
+                <label className="text-white font-medium text-sm sm:text-base mb-2 block">
+                  定价 <span className="text-red-400">*</span>
+                </label>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-white text-base sm:text-lg">
+                    ¥
+                  </span>
+                  <input
+                    type="number"
+                    value={price}
+                    onChange={e => setPrice(e.target.value)}
+                    min={9}
+                    max={99}
+                    step={0.1}
+                    className="w-full bg-[#1A1A1A] border border-white/10 rounded-2xl pl-9 sm:pl-10 pr-4 py-3 text-white placeholder-[#666666] focus:outline-none focus:border-[#1677FF]/50 transition-colors text-sm sm:text-lg"
+                  />
+                </div>
+                <div className="text-[#666666] text-xs sm:text-sm mt-1">¥9.00 - ¥99.00</div>
+              </div>
+              <div>
+                <label className="text-white font-medium text-sm sm:text-base mb-2 block">
+                  总供应量 <span className="text-red-400">*</span>
+                </label>
                 <input
                   type="number"
-                  value={price}
-                  onChange={e => setPrice(e.target.value)}
-                  min={9}
-                  max={99}
-                  step={0.1}
-                  className="w-full bg-[#1A1A1A] border border-white/10 rounded-2xl pl-9 sm:pl-10 pr-4 py-3 text-white placeholder-[#666666] focus:outline-none focus:border-[#1677FF]/50 transition-colors text-sm sm:text-lg"
+                  value={totalSupply}
+                  onChange={e => setTotalSupply(e.target.value)}
+                  min={1}
+                  max={1000}
+                  className="w-full bg-[#1A1A1A] border border-white/10 rounded-2xl px-4 py-3 text-white placeholder-[#666666] focus:outline-none focus:border-[#1677FF]/50 transition-colors text-sm sm:text-lg"
                 />
+                <div className="text-[#666666] text-xs sm:text-sm mt-1">1 - 1000</div>
               </div>
-              <div className="text-[#666666] text-xs sm:text-sm mt-1">¥9.00 - ¥99.00</div>
             </div>
           </div>
         </div>

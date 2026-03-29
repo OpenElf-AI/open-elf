@@ -6,11 +6,11 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export type EmptyStateType = 
-  | 'agents' 
-  | 'my-agents' 
-  | 'conversations' 
-  | 'favorites' 
+export type EmptyStateType =
+  | 'agents'
+  | 'my-agents'
+  | 'conversations'
+  | 'favorites'
   | 'notifications'
   | 'orders'
   | 'search'
@@ -26,12 +26,15 @@ interface EmptyStateProps {
   customIcon?: React.ReactNode;
 }
 
-const emptyStateConfigs: Record<EmptyStateType, {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  actionText?: string;
-}> = {
+const emptyStateConfigs: Record<
+  EmptyStateType,
+  {
+    icon: React.ReactNode;
+    title: string;
+    description: string;
+    actionText?: string;
+  }
+> = {
   agents: {
     icon: <div className="text-6xl">🤖</div>,
     title: '暂无智能体',
@@ -89,29 +92,25 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
   customIcon,
 }) => {
   const config = emptyStateConfigs[type];
-  
+
   const title = customTitle || config.title;
   const description = customDescription || config.description;
   const actionText = customActionText || config.actionText;
   const icon = customIcon || config.icon;
 
   return (
-    <div className={cn(
-      'flex flex-col items-center justify-center p-8 text-center animate-fadeIn',
-      className
-    )}>
-      <div className="mb-5">
-        {icon}
-      </div>
-      
-      <h3 className="text-white font-semibold text-xl mb-2">
-        {title}
-      </h3>
-      
-      <p className="text-[#888888] text-sm mb-6 leading-relaxed max-w-xs">
-        {description}
-      </p>
-      
+    <div
+      className={cn(
+        'flex flex-col items-center justify-center p-8 text-center animate-fadeIn',
+        className
+      )}
+    >
+      <div className="mb-5">{icon}</div>
+
+      <h3 className="text-white font-semibold text-xl mb-2">{title}</h3>
+
+      <p className="text-[#888888] text-sm mb-6 leading-relaxed max-w-xs">{description}</p>
+
       {actionText && onAction && (
         <button
           onClick={onAction}

@@ -39,16 +39,13 @@ export const NetworkStatus: React.FC<NetworkStatusProps> = ({ className }) => {
   }
 
   return (
-    <div className={cn(
-      'fixed top-0 left-0 right-0 z-[9999] animate-slideDown',
-      className
-    )}>
-      <div className={cn(
-        'px-4 py-3 flex items-center justify-center gap-3',
-        isOnline
-          ? 'bg-green-500/95 text-green-900'
-          : 'bg-red-500/95 text-white'
-      )}>
+    <div className={cn('fixed top-0 left-0 right-0 z-[9999] animate-slideDown', className)}>
+      <div
+        className={cn(
+          'px-4 py-3 flex items-center justify-center gap-3',
+          isOnline ? 'bg-green-500/95 text-green-900' : 'bg-red-500/95 text-white'
+        )}
+      >
         {isOnline ? (
           <>
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

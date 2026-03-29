@@ -76,7 +76,7 @@ export const useYiDunCaptcha = (options: YiDunCaptchaOptions) => {
         },
       };
 
-      window.initNECaptcha(config, (instance) => {
+      window.initNECaptcha(config, instance => {
         captchaInstanceRef.current = instance;
       });
     };
@@ -90,10 +90,10 @@ export const useYiDunCaptcha = (options: YiDunCaptchaOptions) => {
     }
 
     setIsVerifying(true);
-    
+
     return new Promise<string>((resolve, reject) => {
       verifyPromiseRef.current = { resolve, reject };
-      
+
       if (options.mock) {
         captchaInstanceRef.current.verify();
       } else if (captchaInstanceRef.current?.verify) {

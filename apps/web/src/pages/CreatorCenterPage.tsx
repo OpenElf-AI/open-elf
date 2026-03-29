@@ -239,7 +239,9 @@ const CreatorCenterPage: React.FC<CreatorCenterPageProps> = ({ onBack }) => {
                 }
               }}
             >
-              <div className={`w-14 h-14 rounded-full ${user?.verificationStatus === 'verified' ? 'bg-green-500/20' : 'bg-yellow-500/20'} flex items-center justify-center`}>
+              <div
+                className={`w-14 h-14 rounded-full ${user?.verificationStatus === 'verified' ? 'bg-green-500/20' : 'bg-yellow-500/20'} flex items-center justify-center`}
+              >
                 <svg
                   className={`w-7 h-7 ${user?.verificationStatus === 'verified' ? 'text-green-500' : 'text-yellow-500'}`}
                   fill="none"

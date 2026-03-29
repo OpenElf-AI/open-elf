@@ -94,14 +94,22 @@ const ProfilePage: React.FC = () => {
                   <div className="flex-1 min-w-0">
                     <h3 className="text-white font-medium text-base mb-1 truncate flex items-center gap-2">
                       {agent.name}
-                      <span className="px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full">Lv.{agent.level}</span>
+                      <span className="px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full">
+                        Lv.{agent.level}
+                      </span>
                     </h3>
-                    <p className="text-[#888888] text-sm mb-3 line-clamp-2 leading-relaxed">{agent.description}</p>
+                    <p className="text-[#888888] text-sm mb-3 line-clamp-2 leading-relaxed">
+                      {agent.description}
+                    </p>
                     <div className="flex items-center gap-3 text-[#666666] text-xs">
                       <span className="flex items-center gap-1">
                         <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                          <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                          <path
+                            fillRule="evenodd"
+                            d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                            clipRule="evenodd"
+                          />
                         </svg>
                         {agent.fans} 粉丝
                       </span>
@@ -160,17 +168,27 @@ const ProfilePage: React.FC = () => {
                     />
                     <div className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-br from-red-500 to-pink-500 rounded-full flex items-center justify-center border-2 border-[#121212]">
                       <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                        <path
+                          fillRule="evenodd"
+                          d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                          clipRule="evenodd"
+                        />
                       </svg>
                     </div>
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="text-white font-medium text-base mb-1 truncate">{agent.name}</h3>
-                    <p className="text-[#888888] text-sm mb-3 line-clamp-2 leading-relaxed">{agent.description}</p>
+                    <p className="text-[#888888] text-sm mb-3 line-clamp-2 leading-relaxed">
+                      {agent.description}
+                    </p>
                     <div className="flex items-center gap-3 text-[#666666] text-xs">
                       <span className="flex items-center gap-1">
                         <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
+                          <path
+                            fillRule="evenodd"
+                            d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
+                            clipRule="evenodd"
+                          />
                         </svg>
                         {agent.conversationCount || 0} 人聊过
                       </span>
@@ -224,14 +242,31 @@ const ProfilePage: React.FC = () => {
               <img src={user?.avatar} alt={user?.name} className="w-full h-full object-cover" />
             </div>
             <div className="absolute -bottom-1 -right-1 w-10 h-10 bg-gradient-to-br from-primary to-[#0958d9] rounded-full flex items-center justify-center shadow-lg shadow-primary/30">
-              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812-1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 0 11-6 0 3 3 0 016 0z" />
+              <svg
+                className="w-5 h-5 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812-1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 13a3 0 11-6 0 3 3 0 016 0z"
+                />
               </svg>
             </div>
           </div>
 
-          <h1 className="text-white font-semibold text-2xl sm:text-3xl mb-2 bg-gradient-to-r from-white to-[#888888] bg-clip-text text-transparent">{user?.name}</h1>
+          <h1 className="text-white font-semibold text-2xl sm:text-3xl mb-2 bg-gradient-to-r from-white to-[#888888] bg-clip-text text-transparent">
+            {user?.name}
+          </h1>
           <p className="text-[#666666] text-sm mb-3 flex items-center gap-2">
             <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
             OpenElf 号: {user?.id.slice(-8)}
@@ -259,14 +294,13 @@ const ProfilePage: React.FC = () => {
               </button>
             )}
           </div>
-
         </div>
 
         <div className="flex items-center justify-around mb-8 border-b border-white/10 pb-4 relative">
           {[
             { key: 'agents', label: '智能体' },
             { key: 'favorites', label: '收藏' },
-          ].map((tab) => (
+          ].map(tab => (
             <button
               key={tab.key}
               onClick={() => handleTabChange(tab.key as 'agents' | 'favorites')}
@@ -294,7 +328,7 @@ const ProfilePage: React.FC = () => {
 
       {showEditModal && (
         <div className="fixed inset-0 z-50">
-          <div 
+          <div
             className="absolute inset-0 bg-black/80 backdrop-blur-sm animate-fadeIn"
             onClick={() => setShowEditModal(false)}
           />
@@ -323,7 +357,7 @@ const ProfilePage: React.FC = () => {
                   type="text"
                   value={editName}
                   onChange={e => setEditName(e.target.value)}
-                  onKeyDown={(e) => {
+                  onKeyDown={e => {
                     if (e.key === 'Enter') {
                       handleSaveProfile();
                     }

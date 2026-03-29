@@ -10,6 +10,7 @@ type View =
   | { type: 'agentChat'; agentId: string }
   | { type: 'createAgent' }
   | { type: 'verification'; showFormInitially?: boolean }
+  | { type: 'realNameVerification' }
   | { type: 'creatorCenter' }
   | { type: 'myAgents' }
   | { type: 'favorites' }

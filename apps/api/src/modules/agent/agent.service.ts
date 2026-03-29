@@ -196,6 +196,25 @@ export class AgentService {
       },
     });
 
+    // 批量预铸造NFT
+    const totalSupply = data.totalSupply || 100;
+    if (totalSupply > 0) {
+      const userAgentData = Array.from({ length: totalSupply }, (_, index) => ({
+        agentId: agent.id,
+        agentName: agent.name,
+        agentAvatar: agent.avatar,
+        originalAgentId: agent.id,
+        // 预铸造的NFT暂时没有所有者，购买时再分配
+      }));
+
+      // 批量创建UserAgent记录
+      await this.prisma.userAgent.createMany({
+        data: userAgentData,
+      });
+
+      console.log(`[Agent] Pre-minted ${totalSupply} NFTs for agent ${agent.id}`);
+    }
+
     // 清除相关缓存
     await this.redisService.clear('agents:*');
 

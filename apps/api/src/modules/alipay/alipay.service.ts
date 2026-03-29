@@ -202,10 +202,50 @@ export class AlipayService {
       });
 
       if (order.assetType === 'agent') {
-        await this.prisma.agent.update({
+        // 更新智能体销售数量
+        const agent = await this.prisma.agent.update({
           where: { id: order.assetId },
           data: { soldCount: { increment: 1 } },
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
         });
+
+        // 分配预铸造的NFT给用户
+        if (order.userId) {
+          // 找到一个未分配的预铸造NFT
+          const userAgent = await this.prisma.userAgent.findFirst({
+            where: {
+              agentId: agent.id,
+              userId: null, // 未分配的NFT
+            },
+          });
+
+          if (userAgent) {
+            // 分配NFT给用户
+            await this.prisma.userAgent.update({
+              where: { id: userAgent.id },
+              data: {
+                userId: order.userId,
+              },
+            });
+            console.log(`[Alipay] Assigned pre-minted NFT ${userAgent.id} to user ${order.userId} for agent ${agent.id}`);
+          } else {
+            // 如果没有预铸造的NFT，创建新的
+            await this.prisma.userAgent.create({
+              data: {
+                userId: order.userId,
+                agentId: agent.id,
+                agentName: agent.name,
+                agentAvatar: agent.avatar,
+                originalAgentId: agent.id,
+              },
+            });
+            console.log(`[Alipay] Created new user agent (NFT) for user ${order.userId} and agent ${agent.id}`);
+          }
+        }
       } else if (order.assetType === 'capability') {
         const pkg = await this.prisma.capabilityPackage.findUnique({
           where: { id: order.assetId },

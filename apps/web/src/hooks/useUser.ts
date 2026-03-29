@@ -24,7 +24,7 @@ export const useUpdateUser = () => {
 
   return useMutation({
     mutationFn: (data: { name?: string; avatar?: string }) => api.users.updateUser(data),
-    onSuccess: (user) => {
+    onSuccess: user => {
       setUser(user);
       queryClient.setQueryData(['currentUser'], user);
     },
@@ -38,7 +38,7 @@ export const useSubmitVerification = () => {
 
   return useMutation({
     mutationFn: api.verification.submit,
-    onSuccess: (user) => {
+    onSuccess: user => {
       setUser(user);
       queryClient.setQueryData(['currentUser'], user);
     },

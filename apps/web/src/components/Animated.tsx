@@ -19,7 +19,7 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   to,
   duration = 1000,
   className,
-  formatValue = (v) => v.toString(),
+  formatValue = v => v.toString(),
 }) => {
   const [count, setCount] = useState(from);
   const startTimeRef = useRef<number>();
@@ -27,25 +27,25 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
 
   useEffect(() => {
     startTimeRef.current = performance.now();
-    
+
     const animate = (timestamp: number) => {
       if (!startTimeRef.current) return;
-      
+
       const elapsed = timestamp - startTimeRef.current;
       const progress = Math.min(elapsed / duration, 1);
-      
+
       const easeOutQuart = 1 - Math.pow(1 - progress, 4);
       const currentValue = Math.floor(from + (to - from) * easeOutQuart);
-      
+
       setCount(currentValue);
-      
+
       if (progress < 1) {
         frameRef.current = requestAnimationFrame(animate);
       }
     };
-    
+
     frameRef.current = requestAnimationFrame(animate);
-    
+
     return () => {
       if (frameRef.current) {
         cancelAnimationFrame(frameRef.current);
@@ -158,16 +158,7 @@ export const Bounce: React.FC<BounceProps> = ({
     }
   }, [trigger, onComplete]);
 
-  return (
-    <div
-      className={cn(
-        isAnimating ? 'animate-bounceIn' : '',
-        className
-      )}
-    >
-      {children}
-    </div>
-  );
+  return <div className={cn(isAnimating ? 'animate-bounceIn' : '', className)}>{children}</div>;
 };
 
 interface ShakeProps {
@@ -176,11 +167,7 @@ interface ShakeProps {
   className?: string;
 }
 
-export const Shake: React.FC<ShakeProps> = ({
-  children,
-  trigger = false,
-  className,
-}) => {
+export const Shake: React.FC<ShakeProps> = ({ children, trigger = false, className }) => {
   const [isShaking, setIsShaking] = useState(false);
 
   useEffect(() => {
@@ -191,11 +178,7 @@ export const Shake: React.FC<ShakeProps> = ({
     }
   }, [trigger]);
 
-  return (
-    <div className={cn(isShaking ? 'animate-shake' : '', className)}>
-      {children}
-    </div>
-  );
+  return <div className={cn(isShaking ? 'animate-shake' : '', className)}>{children}</div>;
 };
 
 interface PulseProps {
@@ -204,16 +187,8 @@ interface PulseProps {
   className?: string;
 }
 
-export const Pulse: React.FC<PulseProps> = ({
-  children,
-  active = true,
-  className,
-}) => {
-  return (
-    <div className={cn(active ? 'animate-pulse-soft' : '', className)}>
-      {children}
-    </div>
-  );
+export const Pulse: React.FC<PulseProps> = ({ children, active = true, className }) => {
+  return <div className={cn(active ? 'animate-pulse-soft' : '', className)}>{children}</div>;
 };
 
 interface ScaleInProps {
@@ -222,11 +197,7 @@ interface ScaleInProps {
   delay?: number;
 }
 
-export const ScaleIn: React.FC<ScaleInProps> = ({
-  children,
-  className,
-  delay = 0,
-}) => {
+export const ScaleIn: React.FC<ScaleInProps> = ({ children, className, delay = 0 }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -253,11 +224,7 @@ interface HeartbeatProps {
   className?: string;
 }
 
-export const Heartbeat: React.FC<HeartbeatProps> = ({
-  children,
-  trigger = false,
-  className,
-}) => {
+export const Heartbeat: React.FC<HeartbeatProps> = ({ children, trigger = false, className }) => {
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
@@ -268,11 +235,7 @@ export const Heartbeat: React.FC<HeartbeatProps> = ({
     }
   }, [trigger]);
 
-  return (
-    <div className={cn(isAnimating ? 'animate-heartBeat' : '', className)}>
-      {children}
-    </div>
-  );
+  return <div className={cn(isAnimating ? 'animate-heartBeat' : '', className)}>{children}</div>;
 };
 
 interface SlideInProps {

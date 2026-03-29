@@ -64,7 +64,10 @@ export const mockApi = {
       await delay(500);
       console.log('[Mock API] sendCode called with:', { phone, type, captchaToken });
     },
-    loginWithCode: async (phone: string, code: string): Promise<{ access_token: string; refresh_token: string; user: User }> => {
+    loginWithCode: async (
+      phone: string,
+      code: string
+    ): Promise<{ access_token: string; refresh_token: string; user: User }> => {
       await delay(500);
       console.log('[Mock API] loginWithCode called with:', { phone, code });
       localStorage.setItem('auth_token', 'mock-token');
@@ -75,7 +78,9 @@ export const mockApi = {
         user: currentUser,
       };
     },
-    loginQuick: async (accessToken: string): Promise<{ access_token: string; refresh_token: string; user: User }> => {
+    loginQuick: async (
+      accessToken: string
+    ): Promise<{ access_token: string; refresh_token: string; user: User }> => {
       await delay(500);
       console.log('[Mock API] loginQuick called with:', { accessToken });
       localStorage.setItem('auth_token', 'mock-token');
@@ -579,7 +584,8 @@ export const mockApi = {
     getStatus: async (): Promise<any> => {
       await delay(300);
       return {
-        status: currentUser.verificationStatus === 'unverified' ? 'none' : currentUser.verificationStatus,
+        status:
+          currentUser.verificationStatus === 'unverified' ? 'none' : currentUser.verificationStatus,
         rejectReason: null,
         auditTime: null,
       };
@@ -587,7 +593,16 @@ export const mockApi = {
   },
 
   order: {
-    create: async (data: { outTradeNo: string; totalAmount: number; subject: string; assetType?: 'agent' | 'capability'; assetId?: string; assetName?: string; sellerId?: string; payType?: 'alipay' }): Promise<Order> => {
+    create: async (data: {
+      outTradeNo: string;
+      totalAmount: number;
+      subject: string;
+      assetType?: 'agent' | 'capability';
+      assetId?: string;
+      assetName?: string;
+      sellerId?: string;
+      payType?: 'alipay';
+    }): Promise<Order> => {
       await delay(300);
       const newOrder: Order = {
         outTradeNo: data.outTradeNo,
@@ -616,13 +631,17 @@ export const mockApi = {
   },
 
   pay: {
-    prepay: async (data: { assetType: string; assetId: string; userId?: string }): Promise<{ paymentUrl: string; outTradeNo: string; amount: number }> => {
+    prepay: async (data: {
+      assetType: string;
+      assetId: string;
+      userId?: string;
+    }): Promise<{ paymentUrl: string; outTradeNo: string; amount: number }> => {
       await delay(500);
-      
+
       let totalAmount = 0.01;
       let subject = 'Test Product';
       let assetName = 'Test Product';
-      
+
       if (data.assetType === 'agent') {
         const agent = agents.find(a => a.id === data.assetId);
         if (agent) {
@@ -638,9 +657,9 @@ export const mockApi = {
           assetName = pkg.name;
         }
       }
-      
+
       const outTradeNo = `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      
+
       const newOrder: Order = {
         outTradeNo,
         totalAmount,
@@ -655,7 +674,7 @@ export const mockApi = {
         userId: data.userId || currentUser.id,
       };
       orders = [newOrder, ...orders];
-      
+
       return {
         paymentUrl: '#/paymentResult?out_trade_no=' + outTradeNo,
         outTradeNo,

@@ -23,7 +23,7 @@ const PaymentResultPage: React.FC<PaymentResultPageProps> = ({ orderId, outTrade
 
   useEffect(() => {
     if (isTimeout) return;
-    
+
     if (order && order.status === 'pending' && pollingCount < maxPollingCount) {
       const timer = setTimeout(() => {
         setPollingCount(prev => prev + 1);
@@ -36,13 +36,19 @@ const PaymentResultPage: React.FC<PaymentResultPageProps> = ({ orderId, outTrade
   }, [order, pollingCount, refetch, isTimeout]);
 
   useEffect(() => {
-    if (order?.status === 'paid' && !assetPurchased && !purchaseMutation.isPending && order.assetType === 'agent' && order.assetId) {
+    if (
+      order?.status === 'paid' &&
+      !assetPurchased &&
+      !purchaseMutation.isPending &&
+      order.assetType === 'agent' &&
+      order.assetId
+    ) {
       purchaseMutation.mutate(order.assetId, {
         onSuccess: () => {
           setAssetPurchased(true);
           console.log('【支付成功】商品已同步');
         },
-        onError: (error) => {
+        onError: error => {
           console.error('【支付成功】商品同步失败:', error);
         },
       });
@@ -58,7 +64,7 @@ const PaymentResultPage: React.FC<PaymentResultPageProps> = ({ orderId, outTrade
   const amount = order?.totalAmount || order?.amount || 0;
 
   const handleGoHome = () => {
-    setCurrentView({ type: 'chat' });
+    setCurrentView('chat');
   };
 
   const handleViewOrders = () => {
@@ -80,7 +86,12 @@ const PaymentResultPage: React.FC<PaymentResultPageProps> = ({ orderId, outTrade
       <div className="p-4 flex items-center gap-4 border-b border-white/10">
         <button onClick={onBack} className="p-2 hover:bg-white/5 rounded-lg">
           <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
           </svg>
         </button>
         <h1 className="text-white font-semibold text-lg">支付结果</h1>
@@ -95,13 +106,23 @@ const PaymentResultPage: React.FC<PaymentResultPageProps> = ({ orderId, outTrade
         ) : isSuccess ? (
           <div className="text-center">
             <div className="w-24 h-24 bg-green-500/20 rounded-full flex items-center justify-center mb-6 mx-auto">
-              <svg className="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <svg
+                className="w-12 h-12 text-green-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
             </div>
             <h2 className="text-white font-bold text-2xl mb-2">支付成功</h2>
             <p className="text-[#888888] mb-6">您已成功购买商品</p>
-            
+
             {order && (
               <div className="bg-[#1A1A1A] rounded-2xl p-4 mb-6 text-left">
                 <div className="flex justify-between items-center py-2">
@@ -151,8 +172,18 @@ const PaymentResultPage: React.FC<PaymentResultPageProps> = ({ orderId, outTrade
         ) : isFailed ? (
           <div className="text-center">
             <div className="w-24 h-24 bg-red-500/20 rounded-full flex items-center justify-center mb-6 mx-auto">
-              <svg className="w-12 h-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="w-12 h-12 text-red-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </div>
             <h2 className="text-white font-bold text-2xl mb-2">支付失败</h2>
@@ -193,8 +224,18 @@ const PaymentResultPage: React.FC<PaymentResultPageProps> = ({ orderId, outTrade
         ) : isTimeoutState ? (
           <div className="text-center">
             <div className="w-24 h-24 bg-yellow-500/20 rounded-full flex items-center justify-center mb-6 mx-auto">
-              <svg className="w-12 h-12 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <svg
+                className="w-12 h-12 text-yellow-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
             </div>
             <h2 className="text-white font-bold text-2xl mb-2">支付超时</h2>

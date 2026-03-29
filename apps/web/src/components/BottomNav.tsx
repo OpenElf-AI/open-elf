@@ -1,9 +1,9 @@
 import React from 'react';
-import { useAppStore, useUserStore } from '../store';
+import { useAppStore } from '../store';
 
 const BottomNav: React.FC = () => {
   const { currentView, setCurrentView } = useAppStore();
-  const { user } = useUserStore();
+
 
   const isActive = (page: string) => {
     if (typeof currentView === 'string') {

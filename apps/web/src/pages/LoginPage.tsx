@@ -30,26 +30,9 @@ const LoginPage: React.FC = () => {
   const [code, setCode] = useState('');
   const [countdown, setCountdown] = useState(0);
 
-  const captcha = useYiDunCaptcha({
-    elementId: 'yidun-captcha',
-    captchaId: '2a7b8936e0cf14960b39ef55ca6efe2de',
-    mode: 'popup',
-    mock: usingMock,
-  });
-
-  if (!apiInitialized) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-          <p className="text-[#666666] text-sm">加载中...</p>
-        </div>
-      </div>
-    );
-  }
-
   const sendCodeMutation = useMutation({
-    mutationFn: (captchaToken: string) => api.auth.sendCode(phone, mode === 'login' ? 'login' : 'register', captchaToken),
+    mutationFn: (captchaToken: string) =>
+      api.auth.sendCode(phone, mode === 'login' ? 'login' : 'register', captchaToken),
     onSuccess: () => {
       showToast('验证码已发送', 'success');
       setCountdown(60);
@@ -94,6 +77,24 @@ const LoginPage: React.FC = () => {
     },
   });
 
+  const captcha = useYiDunCaptcha({
+    elementId: 'yidun-captcha',
+    captchaId: '2a7b8936e0cf14960b39ef55ca6efe2de',
+    mode: 'popup',
+    mock: usingMock,
+  });
+
+  if (!apiInitialized) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+          <p className="text-[#666666] text-sm">加载中...</p>
+        </div>
+      </div>
+    );
+  }
+
   const handleSendCode = async () => {
     if (!phone || !/^1[3-9]\d{9}$/.test(phone)) {
       showToast('请输入正确的手机号', 'error');
@@ -120,12 +121,16 @@ const LoginPage: React.FC = () => {
   };
 
   const handleQuickLogin = async () => {
-    const mockPhone = '139' + Math.floor(Math.random() * 100000000).toString().padStart(8, '0');
+    const mockPhone =
+      '139' +
+      Math.floor(Math.random() * 100000000)
+        .toString()
+        .padStart(8, '0');
     const mockAccessToken = 'mock_quick_login_' + Date.now();
-    
+
     console.log('[Quick Login] 模拟一键登录，手机号:', mockPhone);
     showToast('正在进行一键登录...', 'info');
-    
+
     try {
       quickLoginMutation.mutate(mockAccessToken);
     } catch (error) {
@@ -147,9 +152,7 @@ const LoginPage: React.FC = () => {
             <button
               onClick={() => setMode('login')}
               className={`flex-1 py-3 rounded-xl font-medium transition-colors ${
-                mode === 'login'
-                  ? 'bg-primary text-black'
-                  : 'text-[#888888] hover:text-white'
+                mode === 'login' ? 'bg-primary text-black' : 'text-[#888888] hover:text-white'
               }`}
             >
               登录
@@ -157,9 +160,7 @@ const LoginPage: React.FC = () => {
             <button
               onClick={() => setMode('register')}
               className={`flex-1 py-3 rounded-xl font-medium transition-colors ${
-                mode === 'register'
-                  ? 'bg-primary text-black'
-                  : 'text-[#888888] hover:text-white'
+                mode === 'register' ? 'bg-primary text-black' : 'text-[#888888] hover:text-white'
               }`}
             >
               注册
@@ -200,7 +201,11 @@ const LoginPage: React.FC = () => {
                       : 'bg-primary text-black hover:bg-primary/90'
                   }`}
                 >
-                  {countdown > 0 ? `${countdown}s` : sendCodeMutation.isPending ? '发送中...' : '获取验证码'}
+                  {countdown > 0
+                    ? `${countdown}s`
+                    : sendCodeMutation.isPending
+                      ? '发送中...'
+                      : '获取验证码'}
                 </button>
               </div>
             </div>
@@ -238,7 +243,12 @@ const LoginPage: React.FC = () => {
               ) : (
                 <>
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
+                    />
                   </svg>
                   本机号码一键登录
                 </>

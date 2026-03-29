@@ -14,14 +14,7 @@ interface LazyImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   effect?: 'blur' | 'fade' | 'none';
 }
 
-const generatePlaceholder = (width: number = 40, height: number = 40) => {
-  const svg = `
-    <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
-      <rect width="${width}" height="${height}" fill="#1A1A1A"/>
-    </svg>
-  `;
-  return `data:image/svg+xml;base64,${btoa(svg)}`;
-};
+
 
 export const LazyImage: React.FC<LazyImageProps> = ({
   src,
@@ -47,8 +40,8 @@ export const LazyImage: React.FC<LazyImageProps> = ({
     }
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
+      entries => {
+        entries.forEach(entry => {
           if (entry.isIntersecting) {
             setImageSrc(src);
             observer.unobserve(entry.target);
@@ -94,21 +87,15 @@ export const LazyImage: React.FC<LazyImageProps> = ({
   );
 
   const effectClasses = {
-    blur: cn(
-      'transition-all duration-500',
-      isLoaded ? 'blur-0 scale-100' : 'blur-sm scale-105'
-    ),
-    fade: cn(
-      'transition-opacity duration-500',
-      isLoaded ? 'opacity-100' : 'opacity-0'
-    ),
+    blur: cn('transition-all duration-500', isLoaded ? 'blur-0 scale-100' : 'blur-sm scale-105'),
+    fade: cn('transition-opacity duration-500', isLoaded ? 'opacity-100' : 'opacity-0'),
     none: '',
   };
 
   return (
     <div className={cn('relative overflow-hidden', className)}>
       {!isLoaded && !isError && (placeholder || defaultPlaceholder)}
-      
+
       {isError && (errorPlaceholder || defaultErrorPlaceholder)}
 
       {imageSrc && (
@@ -119,11 +106,7 @@ export const LazyImage: React.FC<LazyImageProps> = ({
           onLoad={handleLoad}
           onError={handleError}
           loading="lazy"
-          className={cn(
-            'w-full h-full object-cover',
-            effectClasses[effect],
-            isError && 'hidden'
-          )}
+          className={cn('w-full h-full object-cover', effectClasses[effect], isError && 'hidden')}
           {...props}
         />
       )}

@@ -21,15 +21,15 @@ const PrivateContentPage: React.FC = () => {
       title: '个人笔记 - 想法记录',
       type: 'note',
       createdAt: '2024-01-15',
-      preview: '今天的一些想法和灵感...'
+      preview: '今天的一些想法和灵感...',
     },
     {
       id: '2',
       title: '重要文件备份',
       type: 'file',
       createdAt: '2024-01-10',
-      preview: '2.5 MB'
-    }
+      preview: '2.5 MB',
+    },
   ]);
 
   const handleCreateNote = () => {
@@ -47,19 +47,15 @@ const PrivateContentPage: React.FC = () => {
     showToast('已删除', 'success');
   };
 
-  const filteredItems = activeType === 'all' 
-    ? items 
-    : items.filter(item => item.type === activeType);
+  const filteredItems =
+    activeType === 'all' ? items : items.filter(item => item.type === activeType);
 
   return (
     <div className="bg-black min-h-screen pb-24">
       <div className="sticky top-0 bg-black/80 backdrop-blur-sm z-10 border-b border-white/5">
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center gap-4">
-            <button
-              onClick={goBack}
-              className="text-[#888888] hover:text-white transition-colors"
-            >
+            <button onClick={goBack} className="text-[#888888] hover:text-white transition-colors">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
@@ -159,7 +155,12 @@ const PrivateContentPage: React.FC = () => {
                   <div className="relative flex-shrink-0">
                     <div className="w-12 h-12 bg-[#1A1A1A] rounded-xl flex items-center justify-center">
                       {item.type === 'note' && (
-                        <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg
+                          className="w-6 h-6 text-primary"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -169,7 +170,12 @@ const PrivateContentPage: React.FC = () => {
                         </svg>
                       )}
                       {item.type === 'file' && (
-                        <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg
+                          className="w-6 h-6 text-primary"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -179,7 +185,12 @@ const PrivateContentPage: React.FC = () => {
                         </svg>
                       )}
                       {item.type === 'link' && (
-                        <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg
+                          className="w-6 h-6 text-primary"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -193,7 +204,9 @@ const PrivateContentPage: React.FC = () => {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-white font-medium text-base mb-1 truncate">{item.title}</h3>
+                        <h3 className="text-white font-medium text-base mb-1 truncate">
+                          {item.title}
+                        </h3>
                         {item.preview && (
                           <p className="text-[#888888] text-sm mb-2 line-clamp-1">{item.preview}</p>
                         )}
@@ -203,7 +216,12 @@ const PrivateContentPage: React.FC = () => {
                         onClick={() => handleDelete(item.id)}
                         className="text-[#666666] hover:text-red-500 transition-colors p-1"
                       >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
                           <path
                             strokeLinecap="round"
                             strokeLinejoin="round"

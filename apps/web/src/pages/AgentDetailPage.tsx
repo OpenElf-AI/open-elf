@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { useToast } from '../components/Toast';
 import { initApi, getApi } from '../api';
-import { useDirectPurchase } from '../hooks/useDirectPurchase';
 
 interface AgentDetailPageProps {
   agentId: string;
@@ -14,7 +13,6 @@ const AgentDetailPage: React.FC<AgentDetailPageProps> = ({ agentId, onBack }) =>
   const queryClient = useQueryClient();
   const [apiInitialized, setApiInitialized] = useState(false);
   const [activeTab, setActiveTab] = useState<'reviews' | 'achievements'>('reviews');
-  const { handlePurchase, isPending } = useDirectPurchase();
 
   useEffect(() => {
     const initializeApi = async () => {
@@ -162,15 +160,23 @@ const AgentDetailPage: React.FC<AgentDetailPageProps> = ({ agentId, onBack }) =>
                   <div className="relative flex-shrink-0">
                     <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-yellow-500/20 to-orange-500/20 flex items-center justify-center shadow-lg shadow-black/30">
                       {achievement.iconUrl ? (
-                        <img src={achievement.iconUrl} alt={achievement.title} className="w-8 h-8" />
+                        <img
+                          src={achievement.iconUrl}
+                          alt={achievement.title}
+                          className="w-8 h-8"
+                        />
                       ) : (
                         <div className="text-2xl">🏅</div>
                       )}
                     </div>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-white font-medium text-base mb-1 truncate">{achievement.title}</h3>
-                    <p className="text-[#888888] text-sm mb-3 line-clamp-2 leading-relaxed">{achievement.description}</p>
+                    <h3 className="text-white font-medium text-base mb-1 truncate">
+                      {achievement.title}
+                    </h3>
+                    <p className="text-[#888888] text-sm mb-3 line-clamp-2 leading-relaxed">
+                      {achievement.description}
+                    </p>
                     <div className="text-[#666666] text-xs">
                       解锁于 {new Date(achievement.unlockedAt).toLocaleDateString('zh-CN')}
                     </div>
@@ -233,8 +239,12 @@ const AgentDetailPage: React.FC<AgentDetailPageProps> = ({ agentId, onBack }) =>
             </div>
           </div>
 
-          <h1 className="text-white font-semibold text-2xl sm:text-3xl mb-2 bg-gradient-to-r from-white to-[#888888] bg-clip-text text-transparent">{agent.name}</h1>
-          <p className="text-[#666666] text-sm mb-3 text-center max-w-md leading-relaxed">{agent.description}</p>
+          <h1 className="text-white font-semibold text-2xl sm:text-3xl mb-2 bg-gradient-to-r from-white to-[#888888] bg-clip-text text-transparent">
+            {agent.name}
+          </h1>
+          <p className="text-[#666666] text-sm mb-3 text-center max-w-md leading-relaxed">
+            {agent.description}
+          </p>
 
           <div className="w-full mb-4">
             <div className="flex items-center justify-between mb-2">
@@ -248,7 +258,7 @@ const AgentDetailPage: React.FC<AgentDetailPageProps> = ({ agentId, onBack }) =>
               </span>
             </div>
             <div className="w-full h-2 bg-[#1A1A1A] rounded-full overflow-hidden">
-              <div 
+              <div
                 className="h-full bg-gradient-to-r from-primary via-[#9254DE] to-primary rounded-full transition-all duration-500"
                 style={{ width: `${Math.min((agent.exp / agent.expToNextLevel) * 100, 100)}%` }}
               />
@@ -258,7 +268,9 @@ const AgentDetailPage: React.FC<AgentDetailPageProps> = ({ agentId, onBack }) =>
           <div className="flex gap-3 flex-wrap justify-center mb-6">
             <button
               onClick={handleFollowToggle}
-              disabled={followStatusLoading || followMutation.isPending || unfollowMutation.isPending}
+              disabled={
+                followStatusLoading || followMutation.isPending || unfollowMutation.isPending
+              }
               className={`px-8 py-3 rounded-xl font-medium text-base transition-all duration-300 active:scale-[0.97] border border-white/5 hover:border-white/10 shadow-lg shadow-black/20 hover:shadow-xl ${
                 followStatus?.isFollowing
                   ? 'bg-[#1A1A1A] text-white hover:bg-[#252525]'
@@ -266,23 +278,6 @@ const AgentDetailPage: React.FC<AgentDetailPageProps> = ({ agentId, onBack }) =>
               }`}
             >
               {followStatus?.isFollowing ? '已关注' : '关注'}
-            </button>
-            <button
-              onClick={() => handlePurchase('agent', agentId)}
-              disabled={isPending}
-              className="bg-[#1677FF] text-white px-8 py-3 rounded-xl font-medium text-base hover:bg-[#0958d9] transition-colors active:scale-[0.97] disabled:bg-[#333333] disabled:text-[#666666] disabled:cursor-not-allowed flex items-center gap-2 shadow-lg shadow-black/20 hover:shadow-xl"
-            >
-              {isPending ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  创建订单中...
-                </>
-              ) : (
-                <>
-                  <span>¥{agent.price.toFixed(2)}</span>
-                  <span>立即购买</span>
-                </>
-              )}
             </button>
           </div>
 
@@ -312,7 +307,7 @@ const AgentDetailPage: React.FC<AgentDetailPageProps> = ({ agentId, onBack }) =>
           {[
             { key: 'reviews', label: '评价' },
             { key: 'achievements', label: '成就' },
-          ].map((tab) => (
+          ].map(tab => (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key as 'reviews' | 'achievements')}
@@ -333,9 +328,7 @@ const AgentDetailPage: React.FC<AgentDetailPageProps> = ({ agentId, onBack }) =>
           ))}
         </div>
 
-        <div className="animate-fadeIn">
-          {renderTabContent()}
-        </div>
+        <div className="animate-fadeIn">{renderTabContent()}</div>
       </div>
     </div>
   );

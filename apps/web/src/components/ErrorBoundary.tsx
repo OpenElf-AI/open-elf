@@ -25,7 +25,7 @@ export class ErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     this.setState({ errorInfo });
     console.error('ErrorBoundary caught an error:', error, errorInfo);
-    
+
     if (process.env.NODE_ENV === 'production') {
       this.reportError(error, errorInfo);
     }
@@ -72,7 +72,7 @@ export class ErrorBoundary extends Component<Props, State> {
             <p className="text-[#888888] text-sm mb-6 leading-relaxed">
               {this.state.error?.message || '页面发生了未知错误，请稍后重试'}
             </p>
-            
+
             {process.env.NODE_ENV === 'development' && this.state.error?.stack && (
               <details className="mb-6 text-left">
                 <summary className="text-[#666666] text-xs cursor-pointer hover:text-white transition-colors mb-2">
@@ -83,7 +83,7 @@ export class ErrorBoundary extends Component<Props, State> {
                 </pre>
               </details>
             )}
-            
+
             <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={this.resetError}

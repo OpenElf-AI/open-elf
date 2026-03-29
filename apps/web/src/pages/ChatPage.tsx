@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useAppStore } from '../store';
 import { useToast } from '../components/Toast';
-import { useConfirm } from '../components/ConfirmDialog';
+
 import { SkeletonList } from '../components/Skeleton';
 import { useConversations, useDeleteConversation } from '../hooks/useConversations';
 
 const ChatPage: React.FC = () => {
   const { setCurrentView } = useAppStore();
   const { showToast } = useToast();
-  const { showConfirm } = useConfirm();
+
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showEditMode, setShowEditMode] = useState(false);
@@ -17,24 +17,7 @@ const ChatPage: React.FC = () => {
   const { data: conversations = [], isLoading } = useConversations();
   const deleteConversationMutation = useDeleteConversation();
 
-  const handleClearAll = () => {
-    showConfirm({
-      title: '清空所有对话',
-      message: '确定要清空所有对话吗？此操作不可恢复。',
-      confirmText: '确认清空',
-      cancelText: '取消',
-      onConfirm: async () => {
-        try {
-          for (const conversation of conversations) {
-            await deleteConversationMutation.mutateAsync(conversation.id);
-          }
-          showToast('已清空所有对话', 'success');
-        } catch (error) {
-          showToast('清空失败，请稍后重试', 'error');
-        }
-      },
-    });
-  };
+
 
   const handleDeleteSelected = async () => {
     try {
