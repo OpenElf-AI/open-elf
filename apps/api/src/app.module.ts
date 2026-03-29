@@ -19,6 +19,7 @@ import { LLMConfigModule } from './modules/llm-config/llm-config.module';
 import { AgentFollowModule } from './modules/agent-follow/agent-follow.module';
 import { AgentReviewModule } from './modules/agent-review/agent-review.module';
 import { AgentAchievementModule } from './modules/agent-achievement/agent-achievement.module';
+import { PermissionModule } from './modules/permission/permission.module';
 import { PrismaModule } from './common/prisma/prisma.module';
 import { HealthController } from './common/health/health.controller';
 // import { AppCacheModule } from './common/cache/cache.module';
@@ -36,6 +37,7 @@ import { RedisModule } from './common/redis/redis.module';
     // AppCacheModule,
     // ThrottleModule,
     MetricsModule,
+    PermissionModule,
     AuthModule,
     UserModule,
     AgentModule,

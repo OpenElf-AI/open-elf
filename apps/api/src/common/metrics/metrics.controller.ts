@@ -6,10 +6,11 @@ export class MetricsController {
   constructor(private metricsService: MetricsService) {}
 
   @Get()
-  getMetrics() {
+  async getMetrics() {
+    const stats = await this.metricsService.getStats();
     return {
       code: 200,
-      data: this.metricsService.getStats(),
+      data: stats,
       message: 'success',
     };
   }

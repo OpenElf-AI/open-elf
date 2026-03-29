@@ -1,4 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Inject } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { RedisService } from '../redis/redis.service';
 
 interface MetricData {
   timestamp: number;
@@ -15,6 +17,11 @@ export class MetricsService {
   private metrics: MetricData[] = [];
   private readonly maxMetrics = 10000;
   private startTime: number = Date.now();
+
+  constructor(
+    @Inject(PrismaService) private prismaService: PrismaService,
+    @Inject(RedisService) private redisService: RedisService,
+  ) {}
 
   recordRequest(
     endpoint: string,
@@ -45,7 +52,7 @@ export class MetricsService {
     }
   }
 
-  getStats() {
+  async getStats() {
     const now = Date.now();
     const lastMinute = this.metrics.filter(m => now - m.timestamp < 60000);
     const lastHour = this.metrics.filter(m => now - m.timestamp < 3600000);
@@ -64,6 +71,26 @@ export class MetricsService {
     const p95Duration = this.getPercentile(durations, 95);
     const p99Duration = this.getPercentile(durations, 99);
 
+    // 检查数据库连接状态
+    let dbStatus = 'unknown';
+    try {
+      await this.prismaService.$queryRaw`SELECT 1`;
+      dbStatus = 'healthy';
+    } catch (error) {
+      dbStatus = 'unhealthy';
+      this.logger.error('Database connection check failed:', error);
+    }
+
+    // 检查Redis连接状态
+    let redisStatus = 'unknown';
+    try {
+      await this.redisService.getClient().ping();
+      redisStatus = 'healthy';
+    } catch (error) {
+      redisStatus = 'unhealthy';
+      this.logger.error('Redis connection check failed:', error);
+    }
+
     return {
       uptime: now - this.startTime,
       totalRequests,
@@ -73,6 +100,12 @@ export class MetricsService {
       avgDuration: `${avgDuration}ms`,
       p95Duration: `${p95Duration}ms`,
       p99Duration: `${p99Duration}ms`,
+      database: {
+        status: dbStatus,
+      },
+      redis: {
+        status: redisStatus,
+      },
     };
   }
 
