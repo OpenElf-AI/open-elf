@@ -1,0 +1,27 @@
+{
+  "name": "@open-elf/shared",
+  "private": true,
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "prisma": {
+    "seed": "node prisma/seed.cjs"
+  },
+  "scripts": {
+    "build": "tsc && prisma generate",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist node_modules",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "prisma db seed",
+    "db:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.12.0",
+    "@open-elf/types": "*"
+  },
+  "devDependencies": {
+    "prisma": "^5.12.0",
+    "typescript": "^5.4.0"
+  }
+}

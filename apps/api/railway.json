@@ -1,0 +1,21 @@
+{
+  "build": {
+    "builder": "NIXPACKS",
+    "nixpacks": {
+      "phases": {
+        "setup": {
+          "nixPkgs": ["nodejs"]
+        },
+        "install": {
+          "cmds": ["cd ../.. && npm ci"]
+        },
+        "build": {
+          "cmds": ["cd apps/api && npm run build"]
+        }
+      },
+      "start": {
+        "cmd": "cd apps/api && npm run start:prod"
+      }
+    }
+  }
+}

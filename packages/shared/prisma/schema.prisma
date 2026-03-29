@@ -1,0 +1,459 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                     String    @id @default(cuid())
+  email                  String?   @unique
+  phone                  String?   @unique
+  name                   String?
+  password               String?
+  avatar                 String?
+  role                   String    @default("user")
+  verificationStatus     String    @default("unverified")
+  verificationPlatform   String?
+  verificationUsername   String?
+  verificationFollowers  Int?
+  verificationProofUrl   String?
+  verificationSubmitTime DateTime?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  wallet                 Wallet?
+  creatorAuths           CreatorAuth[]
+  orders                 Order[]
+  agentFollows           AgentFollow[]
+  agentReviews           AgentReview[]
+  userAgents             UserAgent[]
+
+  @@index([verificationStatus])
+  @@index([createdAt])
+  @@index([email])
+  @@index([phone])
+  @@map("users")
+}
+
+model Admin {
+  id                 String   @id @default(cuid())
+  username           String   @unique
+  email              String?  @unique
+  password           String
+  name               String?
+  avatar             String?
+  role               String   @default("admin")
+  isActive           Boolean  @default(true)
+  lastLoginAt        DateTime?
+  lastLoginIp        String?
+  loginFailureCount  Int      @default(0)
+  lockedUntil        DateTime?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  auditLogs          AuditLog[]
+
+  @@index([username])
+  @@index([role])
+  @@index([isActive])
+  @@map("admins")
+}
+
+model AdminLoginAttempt {
+  id           String   @id @default(cuid())
+  adminId      String?
+  username     String
+  ipAddress    String
+  userAgent    String?
+  success      Boolean
+  createdAt    DateTime @default(now())
+
+  @@index([adminId])
+  @@index([username])
+  @@index([ipAddress])
+  @@index([createdAt])
+  @@map("admin_login_attempts")
+}
+
+model AuditLog {
+  id            String   @id @default(cuid())
+  adminId       String?
+  adminName     String?
+  action        String
+  module        String
+  details       String?
+  ipAddress     String?
+  userAgent     String?
+  requestMethod String?
+  requestUrl    String?
+  status        String?
+  createdAt     DateTime @default(now())
+
+  admin         Admin?   @relation(fields: [adminId], references: [id], onDelete: SetNull)
+
+  @@index([adminId])
+  @@index([action])
+  @@index([module])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+model Agent {
+  id                String           @id @default(cuid())
+  name              String
+  description       String
+  avatar            String
+  prompt            String
+  category          String
+  creatorId         String
+  creatorName       String
+  creatorAvatar     String
+  price             Float
+  totalSupply       Int
+  soldCount         Int              @default(0)
+  isFeatured        Boolean          @default(false)
+  isListed          Boolean          @default(true)
+  conversationCount Int              @default(0)
+  likes             Int              @default(0)
+  level             Int              @default(1)
+  exp               Int              @default(0)
+  expToNextLevel    Int              @default(100)
+  fans              Int              @default(0)
+  isShowcased       Boolean          @default(false)
+  showcasedAt       DateTime?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  followers         AgentFollow[]
+  reviews           AgentReview[]
+  achievements      AgentAchievement[]
+  userAgents        UserAgent[]
+
+  @@index([creatorId])
+  @@index([category])
+  @@index([isListed])
+  @@index([isFeatured])
+  @@index([createdAt])
+  @@index([level])
+  @@index([name])
+  @@index([description])
+  @@map("agents")
+}
+
+model UserAgent {
+  id                String    @id @default(cuid())
+  userId            String
+  agentId           String
+  agentName         String
+  agentAvatar       String
+  originalAgentId   String
+  purchaseTime      DateTime  @default(now())
+  conversationCount Int       @default(0)
+  lastUsedAt        DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  agent             Agent     @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([agentId])
+  @@index([purchaseTime])
+  @@map("user_agents")
+}
+
+model Conversation {
+  id                     String    @id @default(cuid())
+  userId                 String
+  agentId                String
+  agentName              String
+  agentAvatar            String
+  title                  String
+  lastMessage            String?
+  lastMessageAt          DateTime?
+  messageCount           Int       @default(0)
+  isTrial                Boolean   @default(true)
+  trialMessagesRemaining Int       @default(5)
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([agentId])
+  @@index([lastMessageAt])
+  @@map("conversations")
+}
+
+model Message {
+  id             String   @id @default(cuid())
+  conversationId String
+  role           String
+  content        String
+  timestamp      DateTime @default(now())
+  isError        Boolean  @default(false)
+
+  @@index([conversationId])
+  @@index([timestamp])
+  @@map("messages")
+}
+
+model CapabilityPackage {
+  id            String   @id @default(cuid())
+  name          String
+  description   String
+  prompt        String
+  capabilities  String[]
+  category      String
+  creatorId     String
+  creatorName   String
+  creatorAvatar String
+  price         Float
+  totalSupply   Int
+  soldCount     Int      @default(0)
+  isListed      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([creatorId])
+  @@index([category])
+  @@index([isListed])
+  @@index([name])
+  @@index([description])
+  @@map("capability_packages")
+}
+
+model UserCapabilityPackage {
+  id               String   @id @default(cuid())
+  packageId        String
+  userId           String
+  name             String
+  description      String
+  prompt           String
+  capabilities     String[]
+  category         String
+  isInstalled      Boolean  @default(false)
+  installedAgentId String?
+  originalPackageId String
+  canTransfer      Boolean  @default(true)
+  purchasedAt      DateTime @default(now())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([userId])
+  @@index([packageId])
+  @@map("user_capability_packages")
+}
+
+model Favorite {
+  id           String   @id @default(cuid())
+  userId       String
+  agentId      String?
+  capabilityId String?
+  createdAt    DateTime @default(now())
+
+  @@index([userId])
+  @@index([agentId])
+  @@map("favorites")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  type      String
+  title     String
+  content   String
+  link      String?
+  createdAt DateTime @default(now())
+
+  @@index([type])
+  @@map("notifications")
+}
+
+model UserNotification {
+  id             String   @id @default(cuid())
+  userId         String
+  notificationId String
+  isRead         Boolean  @default(false)
+  readAt         DateTime?
+
+  @@index([userId])
+  @@index([notificationId])
+  @@map("user_notifications")
+}
+
+model Order {
+  id           String   @id @default(cuid())
+  outTradeNo   String   @unique @map("out_trade_no")
+  userId       String   @map("user_id")
+  totalAmount  Float    @map("total_amount")
+  subject      String
+  status       String   @default("pending")
+  createTime   DateTime @default(now()) @map("create_time")
+  payTime      DateTime? @map("pay_time")
+  payType      String? @default("alipay") @map("pay_type")
+  
+  assetType    String? @map("asset_type")
+  assetId      String? @map("asset_id")
+  assetName    String? @map("asset_name")
+  sellerId     String? @map("seller_id")
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([outTradeNo])
+  @@index([userId])
+  @@index([status])
+  @@index([createTime])
+  @@index([assetType])
+  @@index([assetId])
+  @@map("orders")
+}
+
+model Transaction {
+  id            String   @id @default(cuid())
+  type          String
+  assetType     String
+  assetId       String
+  assetName     String
+  buyerId       String
+  sellerId      String
+  amount        Float
+  serviceFee    Float
+  sellerReceived Float
+  createdAt     DateTime @default(now())
+
+  @@index([buyerId])
+  @@index([sellerId])
+  @@index([createdAt])
+  @@map("transactions")
+}
+
+model Wallet {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  balance   Float    @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("wallets")
+}
+
+model WalletRecord {
+  id          String   @id @default(cuid())
+  walletId    String
+  amount      Float
+  type        String
+  description String?
+  createdAt   DateTime @default(now())
+
+  @@index([walletId])
+  @@map("wallet_records")
+}
+
+model LLMConfig {
+  id        String   @id @default(cuid())
+  userId    String
+  provider  String
+  model     String
+  apiKey    String?
+  baseUrl   String?
+  temperature Float?
+  maxTokens Int?
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("llm_configs")
+}
+
+model CreatorAuth {
+  id          String   @id @default(cuid())
+  userId      String
+  platform    String
+  accountName String
+  fansCount   Int
+  proofUrl    String
+  status      String   @default("pending")
+  rejectReason String?
+  createdAt   DateTime @default(now())
+  auditTime   DateTime?
+  auditorId   String?
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+  @@map("creator_auth")
+}
+
+model CreatorUser {
+  userId     String   @id
+  isCreator  Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  @@map("creator_user")
+}
+
+model AgentFollow {
+  id        String   @id @default(cuid())
+  userId    String
+  agentId   String
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  agent     Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([agentId])
+  @@unique([userId, agentId])
+  @@map("agent_follows")
+}
+
+model AgentReview {
+  id        String   @id @default(cuid())
+  agentId   String
+  userId    String
+  rating    Int      @db.SmallInt
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  agent     Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@index([agentId])
+  @@index([userId])
+  @@unique([agentId, userId])
+  @@map("agent_reviews")
+}
+
+model AgentAchievement {
+  id            String   @id @default(cuid())
+  agentId       String
+  achievementId String
+  title         String
+  description   String
+  iconUrl       String?
+  unlockedAt    DateTime @default(now())
+
+  agent         Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  @@index([agentId])
+  @@index([achievementId])
+  @@map("agent_achievements")
+}
+
+model AgentLevelConfig {
+  id          Int      @id @default(autoincrement())
+  level       Int      @unique
+  expRequired Int
+  title       String
+  benefits    String[]
+  createdAt   DateTime @default(now())
+
+  @@index([level])
+  @@map("agent_level_configs")
+}

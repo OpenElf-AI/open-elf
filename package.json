@@ -1,0 +1,33 @@
+{
+  "name": "open-elf",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,md}\"",
+    "typecheck": "turbo run typecheck",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "db:generate": "cd packages/shared && npx prisma generate",
+    "db:migrate": "cd packages/shared && npx prisma migrate dev",
+    "db:seed": "cd packages/shared && npx prisma db seed",
+    "db:studio": "cd packages/shared && npx prisma studio"
+  },
+  "devDependencies": {
+    "prettier": "^3.2.5",
+    "turbo": "^2.0.0",
+    "typescript": "^5.4.0"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "npm@10.0.0",
+  "dependencies": {
+    "prisma": "^5.20.0"
+  }
+}
