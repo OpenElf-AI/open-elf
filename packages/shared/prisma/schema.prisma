@@ -21,6 +21,8 @@ model User {
   verificationFollowers  Int?
   verificationProofUrl   String?
   verificationSubmitTime DateTime?
+  blockchainAddress      String?   @unique
+  blockchainPrivateKey   String?
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
 
@@ -183,6 +185,7 @@ model Conversation {
   @@index([userId])
   @@index([agentId])
   @@index([lastMessageAt])
+  @@index([userId, lastMessageAt])
   @@map("conversations")
 }
 
@@ -196,6 +199,7 @@ model Message {
 
   @@index([conversationId])
   @@index([timestamp])
+  @@index([conversationId, timestamp])
   @@map("messages")
 }
 
@@ -306,6 +310,8 @@ model Order {
   @@index([createTime])
   @@index([assetType])
   @@index([assetId])
+  @@index([userId, status])
+  @@index([userId, createTime])
   @@map("orders")
 }
 
@@ -325,6 +331,8 @@ model Transaction {
   @@index([buyerId])
   @@index([sellerId])
   @@index([createdAt])
+  @@index([buyerId, createdAt])
+  @@index([sellerId, createdAt])
   @@map("transactions")
 }
 
@@ -349,6 +357,7 @@ model WalletRecord {
   createdAt   DateTime @default(now())
 
   @@index([walletId])
+  @@index([walletId, createdAt])
   @@map("wallet_records")
 }
 

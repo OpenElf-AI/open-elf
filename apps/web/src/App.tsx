@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useAppStore } from './store';
 import BottomNav from './components/BottomNav';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { NetworkStatus } from './components/NetworkStatus';
 import { useUserStore } from './store';
 import { initApi, getApi, isMockMode } from './api';
 import { useLLMInit } from './hooks/useLLMInit';
@@ -235,6 +236,7 @@ const AppContent: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-background dark">
+      <NetworkStatus />
       <ServiceNotice />
       <main className={`max-w-md mx-auto min-h-screen ${showServiceNotice ? 'pt-16' : ''}`}>
         <Suspense fallback={<PageLoading />}>

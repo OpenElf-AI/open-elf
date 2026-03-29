@@ -9,7 +9,6 @@ const ChatPage: React.FC = () => {
   const { setCurrentView } = useAppStore();
   const { showToast } = useToast();
   const { showConfirm } = useConfirm();
-  const [showMenu, setShowMenu] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showEditMode, setShowEditMode] = useState(false);
@@ -94,19 +93,7 @@ const ChatPage: React.FC = () => {
               </svg>
             </button>
           ) : (
-            <button
-              className="text-white hover:text-[#888888] transition-colors"
-              onClick={() => setShowMenu(!showMenu)}
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16m-7 6h7"
-                />
-              </svg>
-            </button>
+            <div className="w-6"></div>
           )}
           <h1 className="text-white font-semibold text-xl">
             {showEditMode ? `已选 ${selectedConversations.length}` : '对话'}
@@ -204,59 +191,6 @@ const ChatPage: React.FC = () => {
                 autoFocus
               />
             </div>
-          </div>
-        )}
-
-        {showMenu && (
-          <div className="bg-[#121212] rounded-2xl p-4 mb-5 border border-white/5">
-            <button
-              className="w-full text-left py-3 hover:bg-[#1A1A1A] rounded-xl px-4 transition-colors"
-              onClick={() => {
-                setShowMenu(false);
-                setCurrentView('discover');
-              }}
-            >
-              <div className="flex items-center gap-3">
-                <svg
-                  className="w-5 h-5 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-                <span className="text-white">发现智能体</span>
-              </div>
-            </button>
-            <button
-              className="w-full text-left py-3 hover:bg-[#1A1A1A] rounded-xl px-4 transition-colors"
-              onClick={() => {
-                setShowMenu(false);
-                handleClearAll();
-              }}
-            >
-              <div className="flex items-center gap-3">
-                <svg
-                  className="w-5 h-5 text-red-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                  />
-                </svg>
-                <span className="text-white">清空所有对话</span>
-              </div>
-            </button>
           </div>
         )}
 

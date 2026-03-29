@@ -2,25 +2,20 @@ import React from 'react';
 import { Form, Input, Button, Card, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { adminApi } from '../api/client';
+import { useAuthStore } from '../store/authStore';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [loading, setLoading] = React.useState(false);
+  const login = useAuthStore((state) => state.login);
 
   const onFinish = async (values: any) => {
     try {
       setLoading(true);
-      const response = await adminApi.login(values.username, values.password);
-      if (response.data.code === 0) {
-        localStorage.setItem('admin_token', response.data.data.token);
-        localStorage.setItem('user_info', JSON.stringify(response.data.data.admin));
-        message.success('登录成功');
-        navigate('/');
-      } else {
-        message.error(response.data.message || '登录失败');
-      }
+      await login(values.username, values.password);
+      message.success('登录成功');
+      navigate('/');
     } catch (error: any) {
       message.error('登录失败，请检查用户名和密码');
     } finally {

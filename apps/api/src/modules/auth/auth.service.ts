@@ -1,7 +1,9 @@
-import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, BadRequestException, Inject } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../../common/prisma/prisma.service';
 import { YidunService } from '../yidun/yidun.service';
+import { CryptoService } from '../../common/crypto/crypto.service';
+import { BlockchainService } from '../../common/blockchain/blockchain.service';
 
 @Injectable()
 export class AuthService {
@@ -9,6 +11,8 @@ export class AuthService {
     private prisma: PrismaService,
     private jwtService: JwtService,
     private yidunService: YidunService,
+    @Inject(CryptoService) private cryptoService: CryptoService,
+    private blockchainService: BlockchainService,
   ) {}
 
   async sendCode(phone: string, type: string) {
@@ -39,17 +43,25 @@ export class AuthService {
   async loginWithPhone(phone: string, code: string) {
     await this.yidunService.verifySmsCode(phone, code);
 
+    // 加密手机号
+    const encryptedPhone = this.cryptoService.encrypt(phone);
+
     let user = await this.prisma.user.findFirst({
-      where: { phone },
+      where: { phone: encryptedPhone },
     });
 
     if (!user) {
+      // 生成区块链钱包
+      const wallet = this.blockchainService.generateWallet();
+      
       user = await this.prisma.user.create({
         data: {
-          phone,
+          phone: encryptedPhone,
           name: `用户${phone.slice(-4)}`,
           avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${phone}`,
           verificationStatus: 'unverified',
+          blockchainAddress: wallet.address,
+          blockchainPrivateKey: wallet.privateKey,
         },
       });
 
@@ -61,7 +73,7 @@ export class AuthService {
       });
     }
 
-    const accessToken = this.jwtService.sign({ sub: user.id, phone: user.phone });
+    const accessToken = this.jwtService.sign({ sub: user.id, phone: phone });
     const refreshToken = this.jwtService.sign(
       { sub: user.id, type: 'refresh' },
       { secret: process.env.JWT_REFRESH_SECRET || 'refresh-secret', expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '30d' }
@@ -75,7 +87,7 @@ export class AuthService {
         name: user.name,
         avatar: user.avatar,
         role: user.role || 'user',
-        phone: user.phone,
+        phone: phone,
         createdAt: user.createdAt.toISOString(),
         verificationStatus: user.verificationStatus || 'unverified',
       },
@@ -85,17 +97,25 @@ export class AuthService {
   async loginWithQuick(accessToken: string) {
     const { phone } = await this.yidunService.verifyMobileNumber(accessToken);
 
+    // 加密手机号
+    const encryptedPhone = this.cryptoService.encrypt(phone);
+
     let user = await this.prisma.user.findFirst({
-      where: { phone },
+      where: { phone: encryptedPhone },
     });
 
     if (!user) {
+      // 生成区块链钱包
+      const wallet = this.blockchainService.generateWallet();
+      
       user = await this.prisma.user.create({
         data: {
-          phone,
+          phone: encryptedPhone,
           name: `用户${phone.slice(-4)}`,
           avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${phone}`,
           verificationStatus: 'unverified',
+          blockchainAddress: wallet.address,
+          blockchainPrivateKey: wallet.privateKey,
         },
       });
 
@@ -107,7 +127,7 @@ export class AuthService {
       });
     }
 
-    const token = this.jwtService.sign({ sub: user.id, phone: user.phone });
+    const token = this.jwtService.sign({ sub: user.id, phone: phone });
     const refreshToken = this.jwtService.sign(
       { sub: user.id, type: 'refresh' },
       { secret: process.env.JWT_REFRESH_SECRET || 'refresh-secret', expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '30d' }
@@ -121,7 +141,7 @@ export class AuthService {
         name: user.name,
         avatar: user.avatar,
         role: user.role || 'user',
-        phone: user.phone,
+        phone: phone,
         createdAt: user.createdAt.toISOString(),
         verificationStatus: user.verificationStatus || 'unverified',
       },
@@ -129,27 +149,44 @@ export class AuthService {
   }
 
   async loginWithCode(phoneOrEmail: string, code: string) {
-    let user = await this.prisma.user.findFirst({
-      where: { 
-        OR: [
-          { email: phoneOrEmail }, 
-          { id: phoneOrEmail }
-        ] 
-      },
-    });
+    const isPhone = /^1[3-9]\d{9}$/.test(phoneOrEmail);
+    let user;
+
+    if (isPhone) {
+      // 加密手机号
+      const encryptedPhone = this.cryptoService.encrypt(phoneOrEmail);
+      user = await this.prisma.user.findFirst({
+        where: { phone: encryptedPhone },
+      });
+    } else {
+      // 加密邮箱
+      const encryptedEmail = this.cryptoService.encrypt(phoneOrEmail);
+      user = await this.prisma.user.findFirst({
+        where: { 
+          OR: [
+            { email: encryptedEmail }, 
+            { id: phoneOrEmail }
+          ] 
+        },
+      });
+    }
 
     if (!user) {
-      const isPhone = /^1[3-9]\d{9}$/.test(phoneOrEmail);
       const randomName = `用户${Math.floor(1000 + Math.random() * 9000)}`;
+      
+      // 生成区块链钱包
+      const wallet = this.blockchainService.generateWallet();
       
       user = await this.prisma.user.create({
         data: {
-          email: isPhone ? null : phoneOrEmail,
-          phone: isPhone ? phoneOrEmail : null,
+          email: isPhone ? null : this.cryptoService.encrypt(phoneOrEmail),
+          phone: isPhone ? this.cryptoService.encrypt(phoneOrEmail) : null,
           name: randomName,
           avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${phoneOrEmail}`,
           role: 'user',
           verificationStatus: 'unverified',
+          blockchainAddress: wallet.address,
+          blockchainPrivateKey: wallet.privateKey,
         },
       });
 
@@ -161,7 +198,7 @@ export class AuthService {
       });
     }
 
-    const accessToken = this.jwtService.sign({ sub: user.id, email: user.email, phone: user.phone });
+    const accessToken = this.jwtService.sign({ sub: user.id, email: isPhone ? undefined : phoneOrEmail, phone: isPhone ? phoneOrEmail : undefined });
     const refreshToken = this.jwtService.sign(
       { sub: user.id, type: 'refresh' },
       { secret: process.env.JWT_REFRESH_SECRET || 'refresh-secret', expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '30d' }
@@ -175,8 +212,8 @@ export class AuthService {
         name: user.name,
         avatar: user.avatar,
         role: user.role || 'user',
-        email: user.email || undefined,
-        phone: user.phone || undefined,
+        email: isPhone ? undefined : phoneOrEmail,
+        phone: isPhone ? phoneOrEmail : undefined,
         createdAt: user.createdAt.toISOString(),
         verificationStatus: user.verificationStatus || 'unverified',
       },

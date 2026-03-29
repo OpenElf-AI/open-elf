@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useAppStore } from '../store';
-import { useDirectPurchase } from '../hooks/useDirectPurchase';
 import { useAgents } from '../hooks/useAgents';
 import type { Agent } from '../api/types';
 
@@ -12,53 +11,31 @@ interface AgentCardProps {
 
 const AgentCard: React.FC<AgentCardProps> = ({ agent }) => {
   const { setCurrentView } = useAppStore();
-  const { handlePurchase, isPending } = useDirectPurchase();
 
   return (
-    <div className="w-full bg-[#121212] rounded-2xl p-4 sm:p-4 border border-[#1677FF]/20 hover:border-[#1677FF]/40 transition-all duration-200 hover:shadow-[0_0_20px_rgba(22,119,255,0.1)]">
+    <div 
+      className="w-full bg-[#121212] rounded-2xl p-4 sm:p-4 border border-[#1677FF]/20 hover:border-[#1677FF]/40 transition-all duration-200 hover:shadow-[0_0_20px_rgba(22,119,255,0.1)] cursor-pointer active:scale-[0.98]"
+      onClick={() => setCurrentView({ type: 'agent', id: agent.id })}
+    >
       <div className="flex items-start gap-4">
-        <button
-          onClick={() => setCurrentView({ type: 'agent', id: agent.id })}
-          className="flex-shrink-0 active:scale-[0.95] transition-transform"
-        >
-          <img
-            src={agent.avatar}
-            alt={agent.name}
-            className="w-16 h-16 rounded-full object-cover"
-          />
-        </button>
+        <img
+          src={agent.avatar}
+          alt={agent.name}
+          className="w-16 h-16 rounded-full object-cover flex-shrink-0"
+        />
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2 mb-2">
-            <h3
-              className="text-white font-medium truncate flex-1 cursor-pointer hover:text-[#1677FF] transition-colors text-base"
-              onClick={() => setCurrentView({ type: 'agent', id: agent.id })}
-            >
+            <h3 className="text-white font-medium truncate flex-1 text-base">
               {agent.name}
             </h3>
             <span className="text-[#1677FF] font-bold text-lg">¥{agent.price.toFixed(2)}</span>
           </div>
-          <p
-            className="text-[#888888] text-sm mb-3 line-clamp-2 cursor-pointer leading-relaxed"
-            onClick={() => setCurrentView({ type: 'agent', id: agent.id })}
-          >
+          <p className="text-[#888888] text-sm mb-3 line-clamp-2 leading-relaxed">
             {agent.description}
           </p>
           <div className="flex items-center justify-between">
             <span className="text-[#666666] text-xs">@{agent.creatorName}</span>
-            <button
-              onClick={() => handlePurchase('agent', agent.id)}
-              disabled={isPending}
-              className="bg-[#1677FF] text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-[#0958d9] transition-colors active:scale-[0.95] disabled:bg-[#333333] disabled:text-[#666666] disabled:cursor-not-allowed flex items-center gap-2"
-            >
-              {isPending ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  创建订单中...
-                </>
-              ) : (
-                '立即购买'
-              )}
-            </button>
+            <span className="text-[#666666] text-xs">点击查看详情</span>
           </div>
         </div>
       </div>

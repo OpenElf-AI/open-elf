@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { useToast } from '../components/Toast';
 import { initApi, getApi } from '../api';
+import { useDirectPurchase } from '../hooks/useDirectPurchase';
 
 interface AgentDetailPageProps {
   agentId: string;
@@ -13,6 +14,7 @@ const AgentDetailPage: React.FC<AgentDetailPageProps> = ({ agentId, onBack }) =>
   const queryClient = useQueryClient();
   const [apiInitialized, setApiInitialized] = useState(false);
   const [activeTab, setActiveTab] = useState<'reviews' | 'achievements'>('reviews');
+  const { handlePurchase, isPending } = useDirectPurchase();
 
   useEffect(() => {
     const initializeApi = async () => {
@@ -264,6 +266,23 @@ const AgentDetailPage: React.FC<AgentDetailPageProps> = ({ agentId, onBack }) =>
               }`}
             >
               {followStatus?.isFollowing ? '已关注' : '关注'}
+            </button>
+            <button
+              onClick={() => handlePurchase('agent', agentId)}
+              disabled={isPending}
+              className="bg-[#1677FF] text-white px-8 py-3 rounded-xl font-medium text-base hover:bg-[#0958d9] transition-colors active:scale-[0.97] disabled:bg-[#333333] disabled:text-[#666666] disabled:cursor-not-allowed flex items-center gap-2 shadow-lg shadow-black/20 hover:shadow-xl"
+            >
+              {isPending ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  创建订单中...
+                </>
+              ) : (
+                <>
+                  <span>¥{agent.price.toFixed(2)}</span>
+                  <span>立即购买</span>
+                </>
+              )}
             </button>
           </div>
 

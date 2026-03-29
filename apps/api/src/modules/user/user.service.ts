@@ -1,12 +1,14 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, Inject } from '@nestjs/common';
 import { PrismaService } from '../../common/prisma/prisma.service';
 import { NotificationService } from '../notification/notification.service';
+import { CryptoService } from '../../common/crypto/crypto.service';
 
 @Injectable()
 export class UserService {
   constructor(
     private prisma: PrismaService,
     private notificationService: NotificationService,
+    @Inject(CryptoService) private cryptoService: CryptoService,
   ) {}
 
   async getCurrentUser(userId: string) {
@@ -16,13 +18,17 @@ export class UserService {
       return null;
     }
 
+    // 解密敏感数据
+    const decryptedEmail = user.email ? this.cryptoService.decrypt(user.email) : undefined;
+    const decryptedPhone = user.phone ? this.cryptoService.decrypt(user.phone) : undefined;
+
     return {
       id: user.id,
       name: user.name,
       avatar: user.avatar,
       role: user.role || 'user',
-      email: user.email || undefined,
-      phone: user.phone || undefined,
+      email: decryptedEmail,
+      phone: decryptedPhone,
       createdAt: user.createdAt.toISOString(),
       verificationStatus: user.verificationStatus || 'unverified',
       verificationPlatform: user.verificationPlatform || undefined,
@@ -59,13 +65,17 @@ export class UserService {
       },
     });
 
+    // 解密敏感数据
+    const decryptedEmail = user.email ? this.cryptoService.decrypt(user.email) : undefined;
+    const decryptedPhone = user.phone ? this.cryptoService.decrypt(user.phone) : undefined;
+
     return {
       id: user.id,
       name: user.name,
       avatar: user.avatar,
       role: user.role || 'user',
-      email: user.email || undefined,
-      phone: user.phone || undefined,
+      email: decryptedEmail,
+      phone: decryptedPhone,
       createdAt: user.createdAt.toISOString(),
       verificationStatus: user.verificationStatus || 'unverified',
       verificationPlatform: user.verificationPlatform || undefined,

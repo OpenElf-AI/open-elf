@@ -18,9 +18,12 @@ export const useAuthStore = create<AuthState>((set) => ({
         localStorage.setItem('admin_token', response.data.data.token);
         localStorage.setItem('user_info', JSON.stringify(response.data.data.admin));
         set({ isAuthenticated: true, user: response.data.data.admin });
+      } else {
+        throw new Error(response.data.message || '登录失败');
       }
     } catch (error) {
       console.error('Login error:', error);
+      throw error;
     }
   },
   logout: () => {

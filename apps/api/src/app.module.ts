@@ -21,22 +21,32 @@ import { AgentReviewModule } from './modules/agent-review/agent-review.module';
 import { AgentAchievementModule } from './modules/agent-achievement/agent-achievement.module';
 import { PermissionModule } from './modules/permission/permission.module';
 import { PrismaModule } from './common/prisma/prisma.module';
-import { HealthController } from './common/health/health.controller';
-// import { AppCacheModule } from './common/cache/cache.module';
-// import { ThrottleModule } from './common/throttle/throttle.module';
+import { CacheModule } from './common/cache/cache.module';
+import { ThrottleModule } from './common/throttle/throttle.module';
+import { CryptoModule } from './common/crypto/crypto.module';
 import { MetricsModule } from './common/metrics/metrics.module';
 import { RedisModule } from './common/redis/redis.module';
+import { BlockchainModule } from './common/blockchain/blockchain.module';
+import { HealthController } from './common/health/health.controller';
+import { AnalyticsModule } from './modules/analytics/analytics.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: [
+        `.env.${process.env.NODE_ENV || 'development'}`,
+        '.env',
+      ],
     }),
     PrismaModule,
     RedisModule,
-    // AppCacheModule,
-    // ThrottleModule,
+    CacheModule,
+    ThrottleModule,
+    CryptoModule,
+    BlockchainModule,
     MetricsModule,
+    AnalyticsModule,
     PermissionModule,
     AuthModule,
     UserModule,

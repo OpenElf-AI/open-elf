@@ -134,4 +134,8 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
       return 0;
     }
   }
+
+  getClient() {
+    return this.client;
+  }
 }
